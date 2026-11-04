@@ -1,0 +1,3907 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>The Secret Language of Emojis: Generational Semiotics & Interactive Arcade</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans for UI & JetBrains Mono for Code/Stats -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Three.js (r128) from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Brython for client-side Python logic execution behind-the-scenes -->
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.12.0/brython.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.12.0/brython_stdlib.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. FUTURISTIC DESIGN SYSTEM VARIABLES & RESET
+       ========================================================================== */
+    :root {
+      --bg-dark: #07090e;
+      --bg-card: rgba(18, 22, 34, 0.74);
+      --bg-card-hover: rgba(28, 34, 54, 0.9);
+      --card-border: rgba(255, 255, 255, 0.09);
+      --card-border-glow: rgba(99, 102, 241, 0.45);
+
+      /* Generation Accent Colors */
+      --boomer-blue: #38bdf8;
+      --genx-amber: #f59e0b;
+      --millennial-pink: #ec4899;
+      --genz-neon: #10b981;
+      --genz-purple: #8b5cf6;
+      --danger-red: #ef4444;
+
+      /* High-End Futuristic Gradients */
+      --grad-cyan-indigo: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+      --grad-purple-pink: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+      --grad-emerald-cyan: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      --grad-gold-rose: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+      --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+
+      /* Typography & Shadows */
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --text-white: #f8fafc;
+      --text-light: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --shadow-ambient: 0 25px 60px -15px rgba(0, 0, 0, 0.85);
+      --shadow-neon: 0 0 25px rgba(99, 102, 241, 0.35);
+
+      /* Animation Curves */
+      --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-main);
+      direction: ltr;
+      text-align: left;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.16) 0%, transparent 42%),
+                  radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.14) 0%, transparent 45%),
+                  radial-gradient(circle at 50% 50%, #080b12 0%, #030407 100%);
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Ambient 3D ThreeJS Canvas Layer */
+    #three-bg-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.75;
+      transition: opacity 0.8s ease;
+    }
+
+    /* ==========================================================================
+       2. PRESENTATION DECK CONTAINER
+       ========================================================================== */
+    .deck-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 1360px;
+      height: 94vh;
+      max-height: 870px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      background: rgba(13, 17, 27, 0.76);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: var(--shadow-ambient), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    /* Top Progress Bar */
+    .deck-progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      position: relative;
+    }
+
+    .deck-progress-fill {
+      height: 100%;
+      width: 9%;
+      background: var(--grad-cyan-indigo);
+      transition: width 0.5s var(--ease-snappy);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.85);
+    }
+
+    /* Header Nav Bar */
+    .deck-header {
+      height: 64px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(18, 22, 34, 0.45);
+      flex-shrink: 0;
+    }
+
+    .deck-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-emoji-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--grad-glass);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      animation: gentle-pulse 4s infinite ease-in-out;
+    }
+
+    @keyframes gentle-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); filter: drop-shadow(0 0 8px #6366f1); }
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-white);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-subtitle {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .deck-meta-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-badge-counter {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-badge-counter span.highlight {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-white);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       3. SLIDES STAGE & TRANSITIONS
+       ========================================================================== */
+    .deck-stage {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 24px 36px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(40px) scale(0.98);
+      transition: opacity 0.5s var(--ease-snappy),
+                  transform 0.5s var(--ease-snappy),
+                  visibility 0.5s;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 6px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+      z-index: 5;
+    }
+
+    .slide.exit-left {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-40px) scale(0.98);
+    }
+
+    /* Section Tag & Headers */
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 4px 12px;
+      border-radius: 6px;
+      width: fit-content;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #38bdf8;
+    }
+
+    .slide-title {
+      font-size: clamp(22px, 2.5vw, 34px);
+      font-weight: 800;
+      color: var(--text-white);
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .slide-title span.glow-gradient {
+      background: var(--grad-cyan-indigo);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .slide-title span.glow-pink {
+      background: var(--grad-purple-pink);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .slide-title span.glow-green {
+      background: var(--grad-emerald-cyan);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .slide-desc {
+      font-size: clamp(12px, 1.25vw, 14px);
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 900px;
+      margin-bottom: 18px;
+    }
+
+    /* Common Glass Card */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ==========================================================================
+       4. SLIDE 1: TITLE & HERO (3D EMOJI WITH EYE/GAZE TRACKING)
+       ========================================================================== */
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .hero-stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .hero-stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .hero-stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-white);
+      font-family: var(--font-mono);
+      margin-bottom: 4px;
+      background: var(--grad-cyan-indigo);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .hero-3d-wrapper {
+      position: relative;
+      height: 390px;
+      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.16) 0%, transparent 70%);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #hero-canvas-3d {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+    #hero-canvas-3d:active { cursor: grabbing; }
+
+    .hero-canvas-hint {
+      position: absolute;
+      bottom: 12px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-light);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ==========================================================================
+       5. SLIDE 2: EMOJI DICTIONARY (GEN Z VS GEN X PERSPECTIVE)
+       ========================================================================== */
+    .dict-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dict-filter-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dict-filter-btn:hover, .dict-filter-btn.active {
+      background: var(--grad-cyan-indigo);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+
+    .dict-search-input {
+      margin-left: auto;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--card-border);
+      color: var(--text-white);
+      outline: none;
+      width: 220px;
+    }
+
+    .dict-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      max-height: 440px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .dict-card {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .dict-card:hover {
+      border-color: #818cf8;
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+    }
+
+    .dict-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dict-glyph {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .dict-badge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-genx { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-genz { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-hazard { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .dict-box-genx {
+      font-size: 11px;
+      color: var(--text-light);
+      background: rgba(245, 158, 11, 0.08);
+      border-radius: 8px;
+      padding: 8px;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .dict-box-genz {
+      font-size: 11px;
+      color: var(--text-white);
+      background: rgba(16, 185, 129, 0.08);
+      border-radius: 8px;
+      padding: 8px;
+      border-left: 3px solid #10b981;
+      font-weight: 600;
+    }
+
+    .dict-subtext {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* ==========================================================================
+       6. SLIDE 3: MEMORY MATCH GAME
+       ========================================================================== */
+    .memory-game-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 10px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+    }
+
+    .memory-stats-group {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .memory-stat-item span.num {
+      color: #38bdf8;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      perspective: 1000px;
+      max-height: 420px;
+    }
+
+    .memory-card {
+      height: 88px;
+      position: relative;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.45s var(--ease-snappy);
+    }
+
+    .memory-card.flipped { transform: rotateY(180deg); }
+    .memory-card.matched { transform: rotateY(180deg); cursor: default; }
+
+    .memory-card-front, .memory-card-back {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    .memory-card-front {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+      font-size: 28px;
+      color: #64748b;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .memory-card-back {
+      transform: rotateY(180deg);
+      background: rgba(26, 32, 54, 0.95);
+      border-color: #6366f1;
+      padding: 10px;
+      text-align: center;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .memory-card.matched .memory-card-back {
+      border-color: #10b981;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.55);
+      background: rgba(16, 185, 129, 0.18);
+    }
+
+    .memory-content-glyph {
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .memory-content-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.35;
+    }
+
+    .memory-win-banner {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 9, 14, 0.94);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 20;
+    }
+
+    /* ==========================================================================
+       7. SLIDE 4: POPULAR EMOJI ANALYTICS (STATISTICAL BAR CHARTS)
+       ========================================================================== */
+    .analytics-stage-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .analytics-chart-box {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .chart-category-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chart-tab-btn {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .chart-tab-btn.active {
+      background: #8b5cf6;
+      border-color: #a78bfa;
+      color: #fff;
+    }
+
+    .bar-chart-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 36px 130px 1fr 60px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bar-emoji {
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .bar-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-light);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: var(--grad-cyan-indigo);
+      transition: width 0.7s var(--ease-snappy);
+    }
+
+    .bar-val {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: #38bdf8;
+      text-align: right;
+    }
+
+    .analytics-insights-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .insight-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .insight-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .insight-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       8. SLIDE 5: EMOJI WORDLE (TEXT CLUES INSTEAD OF PICTURES)
+       ========================================================================== */
+    .wordle-wrapper {
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .wordle-board-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wordle-grid {
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      gap: 6px;
+    }
+
+    .wordle-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .wordle-tile {
+      width: 50px;
+      height: 50px;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-white);
+      text-transform: uppercase;
+      background: rgba(0, 0, 0, 0.35);
+      user-select: none;
+      transition: all 0.25s ease;
+    }
+
+    .wordle-tile.pop {
+      animation: tile-pop 0.15s ease-in-out;
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    @keyframes tile-pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .wordle-tile.correct {
+      background: #10b981 !important;
+      border-color: #10b981 !important;
+      color: #fff !important;
+    }
+
+    .wordle-tile.present {
+      background: #f59e0b !important;
+      border-color: #f59e0b !important;
+      color: #fff !important;
+    }
+
+    .wordle-tile.absent {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+      color: #64748b !important;
+    }
+
+    .wordle-keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+      max-width: 480px;
+      margin-top: 4px;
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .key-btn {
+      height: 40px;
+      min-width: 30px;
+      padding: 0 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-light);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .key-btn.wide { min-width: 52px; font-size: 11px; }
+    .key-btn:hover { background: rgba(255, 255, 255, 0.18); transform: translateY(-1px); }
+    .key-btn.correct { background: #10b981; color: #fff; }
+    .key-btn.present { background: #f59e0b; color: #fff; }
+    .key-btn.absent { background: #1e293b; color: #475569; }
+
+    .wordle-info-card {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .wordle-hint-box {
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 13px;
+      color: #c7d2fe;
+      line-height: 1.45;
+    }
+
+    /* ==========================================================================
+       9. SLIDE 6: GUESS THE COUNTRY BY EMOJI
+       ========================================================================== */
+    .country-game-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .country-card-main {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .country-emoji-display {
+      font-size: 68px;
+      letter-spacing: 12px;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+      animation: float-slight 3s infinite ease-in-out alternate;
+    }
+
+    @keyframes float-slight {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+
+    .country-input-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .country-input {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: var(--font-main);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      color: var(--text-white);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .country-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+    }
+
+    .country-feedback-box {
+      min-height: 28px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .country-stats-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .country-stat-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    /* ==========================================================================
+       10. SLIDE 7: EMOJI AVATAR BUILDER
+       ========================================================================== */
+    .avatar-builder-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .avatar-stage-box {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .avatar-canvas-preview {
+      width: 220px;
+      height: 220px;
+      position: relative;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(15, 23, 42, 0.8) 70%);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 35px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      transition: all 0.3s ease;
+    }
+
+    .avatar-layer {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .avatar-layer.base { font-size: 110px; z-index: 2; line-height: 1; }
+    .avatar-layer.hat { font-size: 72px; top: -38px; z-index: 5; line-height: 1; }
+    .avatar-layer.glasses { font-size: 60px; top: 48px; z-index: 4; line-height: 1; }
+    .avatar-layer.accessory { font-size: 46px; right: 10px; bottom: 16px; z-index: 6; line-height: 1; }
+
+    .avatar-controls-box {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 450px;
+      overflow-y: auto;
+    }
+
+    .avatar-picker-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .avatar-picker-title {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .avatar-options-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .avatar-option-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .avatar-option-btn:hover, .avatar-option-btn.active {
+      background: rgba(99, 102, 241, 0.25);
+      border-color: #818cf8;
+      transform: scale(1.1);
+    }
+
+    /* ==========================================================================
+       11. SLIDE 8: TRIVIA CHALLENGE
+       ========================================================================== */
+    .trivia-game-box {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+    }
+
+    .trivia-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+
+    .trivia-q-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .trivia-score-pill {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+      font-weight: 700;
+    }
+
+    .trivia-question-text {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.4;
+    }
+
+    .trivia-answers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .trivia-answer-btn {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text-light);
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .trivia-answer-btn:hover {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: #818cf8;
+      transform: translateX(3px);
+    }
+
+    .trivia-answer-btn.correct-glow {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
+      color: #fff !important;
+    }
+
+    .trivia-answer-btn.wrong-glow {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+    }
+
+    .trivia-feedback-panel {
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      display: none;
+    }
+
+    .trivia-feedback-panel.active { display: block; }
+    .trivia-feedback-panel.success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; }
+    .trivia-feedback-panel.failure { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+
+    /* ==========================================================================
+       12. SLIDE 9: HISTORICAL EVOLUTION (DOCOMO TO UNICODE)
+       ========================================================================== */
+    .history-timeline-track {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      position: relative;
+      margin-top: 10px;
+    }
+
+    .history-timeline-track::before {
+      content: "";
+      position: absolute;
+      top: 36px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #ec4899, #10b981);
+      z-index: 1;
+      opacity: 0.5;
+    }
+
+    .history-card {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .history-card:hover, .history-card.active {
+      border-color: #818cf8;
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .history-pin {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #0f172a;
+      border: 2px solid #818cf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+    }
+
+    .history-year {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 4px;
+    }
+
+    .history-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+
+    .history-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .moma-tribute-box {
+      margin-top: 22px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    /* ==========================================================================
+       13. SLIDE 10: "CATCH THE EMOJI" ARCADE MINI-GAME
+       ========================================================================== */
+    .arcade-container {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .arcade-hud {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .arcade-hud-item span.val {
+      font-weight: 800;
+      color: #38bdf8;
+      font-size: 14px;
+    }
+
+    .arcade-stage {
+      position: relative;
+      height: 380px;
+      background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.12) 0%, rgba(7, 9, 14, 0.9) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .falling-emoji-item {
+      position: absolute;
+      font-size: 38px;
+      user-select: none;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+    }
+
+    .falling-emoji-item:active { transform: scale(0.85); }
+
+    .floating-score-tag {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 800;
+      color: #10b981;
+      pointer-events: none;
+      animation: float-up-fade 0.8s ease forwards;
+    }
+
+    .floating-score-tag.penalty {
+      color: #ef4444;
+    }
+
+    @keyframes float-up-fade {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-30px); opacity: 0; }
+    }
+
+    .arcade-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 9, 14, 0.92);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 20;
+    }
+
+    /* ==========================================================================
+       14. SLIDE 11: CLOSING / THANK YOU SCREEN
+       ========================================================================== */
+    .thankyou-wrapper {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .thankyou-card {
+      background: rgba(18, 22, 34, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 24px;
+      padding: 42px 48px;
+      max-width: 680px;
+      text-align: center;
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(99, 102, 241, 0.35);
+      z-index: 10;
+      position: relative;
+    }
+
+    .floating-bg-item {
+      position: absolute;
+      font-size: 44px;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.6));
+      animation: drift-and-pulse 6s infinite ease-in-out alternate;
+    }
+
+    @keyframes drift-and-pulse {
+      0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.7; }
+      50% { transform: translateY(-25px) scale(1.15) rotate(10deg); opacity: 0.95; }
+      100% { transform: translateY(-50px) scale(1) rotate(-10deg); opacity: 0.6; }
+    }
+
+    /* ==========================================================================
+       15. DECK FOOTER & NAVIGATION CONTROLS
+       ========================================================================== */
+    .deck-footer {
+      height: 72px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--card-border);
+      background: rgba(18, 22, 34, 0.45);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 20;
+    }
+
+    .dots-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: all 0.3s var(--ease-snappy);
+      position: relative;
+    }
+
+    .nav-dot:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(1.2);
+    }
+
+    .nav-dot.active {
+      width: 32px;
+      background: var(--grad-cyan-indigo);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.8);
+    }
+
+    .nav-dot::after {
+      content: attr(data-title);
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      padding: 4px 8px;
+      background: rgba(0, 0, 0, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 10px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      font-family: var(--font-main);
+    }
+
+    .nav-dot:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .btn-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      padding: 8px 18px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-light);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn.primary {
+      background: var(--grad-cyan-indigo);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .nav-btn.primary:hover {
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .key-hint {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-left: 4px;
+    }
+
+    @media (max-width: 1024px) {
+      .deck-viewport { height: 98vh; border-radius: 12px; }
+      .hero-layout, .analytics-stage-grid, .wordle-wrapper, 
+      .country-game-layout, .avatar-builder-layout {
+        grid-template-columns: 1fr;
+      }
+      .dict-grid, .history-timeline-track, .memory-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body onload="brython(1)">
+
+  <!-- Ambient Three.js Background Particle Canvas -->
+  <canvas id="three-bg-canvas"></canvas>
+
+  <!-- Main Presentation Container -->
+  <main class="deck-viewport" id="deck-container">
+
+    <!-- Progress Track -->
+    <div class="deck-progress-track">
+      <div class="deck-progress-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="deck-header">
+      <div class="deck-brand">
+        <div class="brand-emoji-badge" id="brand-badge">🎭</div>
+        <div class="brand-title">
+          <span>Emoji Semiotics</span>
+          <span class="brand-subtitle">Generational Lexicon & Interactive Arcade</span>
+        </div>
+      </div>
+
+      <div class="deck-meta-controls">
+        <div class="slide-badge-counter">
+          SLIDE <span class="highlight" id="current-slide-num">01</span> / <span id="total-slide-num">10</span>
+        </div>
+        <button class="icon-btn" id="audio-toggle-btn" title="Toggle UI Sound Effects (M)">
+          🔊
+        </button>
+        <button class="icon-btn" id="fullscreen-btn" title="Toggle Fullscreen (F)">
+          ⛶
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Stage -->
+    <div class="deck-stage" id="deck-stage">
+
+      <!-- ================================================================
+           SLIDE 1: TITLE & HERO (3D SMILING EMOJI WITH EYE/GAZE TRACKING)
+           ================================================================ -->
+      <section class="slide active" data-index="1" data-title="Title & Hero">
+        <div class="hero-layout">
+          <div>
+            <div class="slide-tag">01 // Cultural Semiotics & Generational Linguistics</div>
+            <h1 class="slide-title">
+              The Secret Language of <span class="glow-gradient">Emojis</span>
+            </h1>
+            <p class="slide-desc">
+              From literal corporate punctuation to post-ironic cryptographic dialects. Explore the profound semiotic drift between Boomers, Gen X, Millennials, and Gen Z through real-time 3D models and interactive games.
+            </p>
+
+            <div class="hero-stats-row">
+              <div class="hero-stat-card">
+                <div class="hero-stat-num">10B+</div>
+                <div class="hero-stat-label">Emojis transmitted globally every single day</div>
+              </div>
+              <div class="hero-stat-card">
+                <div class="hero-stat-num">84%</div>
+                <div class="hero-stat-label">Gen Z find 👍 passive-aggressive & dismissive</div>
+              </div>
+              <div class="hero-stat-card">
+                <div class="hero-stat-num">4 Dialects</div>
+                <div class="hero-stat-label">Distinct cohort syntax models identified in text</div>
+              </div>
+            </div>
+
+            <div style="margin-top:24px; display:flex; gap:12px;">
+              <button class="nav-btn primary" onclick="goToSlide(2)">
+                Explore Dictionary ➔
+              </button>
+              <button class="nav-btn" onclick="goToSlide(10)">
+                Play Arcade 🎮
+              </button>
+            </div>
+          </div>
+
+          <!-- 3D Three.js Smiling Emoji with Gaze/Eye Tracking -->
+          <div class="hero-3d-wrapper">
+            <canvas id="hero-canvas-3d"></canvas>
+            <div class="hero-canvas-hint">
+              <span>👀 Cursor moves emoji gaze • Drag to rotate 360°</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 2: EMOJI DICTIONARY (GEN Z VS GEN X PERSPECTIVE)
+           ================================================================ -->
+      <section class="slide" data-index="2" data-title="Emoji Dictionary">
+        <div class="slide-tag">02 // Generational Decryption Matrix</div>
+        <h2 class="slide-title">
+          The Generational <span class="glow-pink">Emoji Dictionary</span>
+        </h2>
+        <p class="slide-desc">
+          Compare how identical glyphs carry polarized semantic meanings across cohorts: Pragmatic workplace literalism (Gen X) versus deadpan post-ironic subversion (Gen Z).
+        </p>
+
+        <div class="dict-filter-bar">
+          <button class="dict-filter-btn active" onclick="filterDict('all', this)">All Glyphs</button>
+          <button class="dict-filter-btn" onclick="filterDict('hazard', this)">Workplace Hazards</button>
+          <button class="dict-filter-btn" onclick="filterDict('slang', this)">Youth Inversion</button>
+          <button class="dict-filter-btn" onclick="filterDict('praise', this)">Validation & Sass</button>
+          <input type="text" class="dict-search-input" placeholder="🔍 Search glyph or slang..." oninput="searchDict(this.value)">
+        </div>
+
+        <div class="dict-grid" id="dict-cards-container">
+          <!-- Dynamically populated via JS/Python logic -->
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 3: MEMORY GAME (PAIRING EMOJIS WITH CULTURAL MEANINGS)
+           ================================================================ -->
+      <section class="slide" data-index="3" data-title="Memory Game">
+        <div class="slide-tag">03 // Interactive Mini-Game #1</div>
+        <h2 class="slide-title">
+          Generational <span class="glow-gradient">Memory Match</span>
+        </h2>
+        <p class="slide-desc">
+          Test your cross-cohort fluency! Flip cards to pair modern slang emojis with their authentic generational interpretations.
+        </p>
+
+        <div class="memory-game-header">
+          <div class="memory-stats-group">
+            <div class="memory-stat-item">MOVES: <span class="num" id="mem-moves">0</span></div>
+            <div class="memory-stat-item">MATCHES: <span class="num" id="mem-matches">0 / 6</span></div>
+            <div class="memory-stat-item">TIME: <span class="num" id="mem-timer">00:00</span></div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button class="nav-btn primary" onclick="initMemoryGame()" style="padding:6px 14px; font-size:11px;">
+              🔄 Restart Deck
+            </button>
+          </div>
+        </div>
+
+        <div style="position:relative;">
+          <div class="memory-grid" id="memory-board">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Victory Overlay -->
+          <div class="memory-win-banner" id="mem-win-banner">
+            <div style="font-size:48px;">🏆🎉</div>
+            <div style="font-size:22px; font-weight:800; color:var(--text-white);">Generational Match Master!</div>
+            <p style="font-size:13px; color:var(--text-muted); text-align:center; max-width:420px;" id="mem-win-summary">
+              You decoded all 6 generational pairs with exceptional accuracy!
+            </p>
+            <button class="nav-btn primary" onclick="initMemoryGame()">Play Again 🔄</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 4: POPULAR EMOJI ANALYTICS (STATISTICAL BAR CHARTS)
+           ================================================================ -->
+      <section class="slide" data-index="4" data-title="Emoji Analytics">
+        <div class="slide-tag">04 // Empirical Data Visualization</div>
+        <h2 class="slide-title">
+          Popular Emoji <span class="glow-pink">Global Analytics</span>
+        </h2>
+        <p class="slide-desc">
+          Worldwide usage percentages and demographic divergences. Observe how mainstream ubiquity triggers rapid youth abandonment and semantic decay.
+        </p>
+
+        <div class="analytics-stage-grid">
+          <!-- Graphical Statistical Bar Chart -->
+          <div class="analytics-chart-box">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="font-size:14px; font-weight:700; color:var(--text-white);">
+                Global Transmission Share (% of Total Daily Volume)
+              </h3>
+              <div class="chart-category-bar">
+                <button class="chart-tab-btn active" onclick="switchChartCategory('global', this)">All-Time</button>
+                <button class="chart-tab-btn" onclick="switchChartCategory('genz', this)">Gen Z Peak</button>
+                <button class="chart-tab-btn" onclick="switchChartCategory('workplace', this)">Workplace</button>
+              </div>
+            </div>
+
+            <div class="bar-chart-container" id="bar-chart-stage">
+              <!-- Rendered cleanly with HTML/CSS data viz -->
+            </div>
+          </div>
+
+          <!-- Analytical Insights -->
+          <div class="analytics-insights-col">
+            <div class="insight-card">
+              <div class="insight-title">
+                <span>📉</span> Semiotic Inflation Law
+              </div>
+              <p class="insight-text">
+                When an expressive emoji reaches universal corporate penetration (commercials, bank promos), its youth insider currency crashes to zero, forcing migration to morbid tokens (💀, 😭, 🪑).
+              </p>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-title">
+                <span>⚡</span> The $82,000 Thumbs-Up Precedent
+              </div>
+              <p class="insight-text">
+                In 2023, the Canadian King's Bench ruled that texting 👍 created an enforceable $82,000 CAD contract. The court declared emojis legitimate instruments of legal acceptance.
+              </p>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-title">
+                <span>❤️</span> Universal Invariance
+              </div>
+              <p class="insight-text">
+                Red Heart ❤️ remains the only top-tier glyph with near-zero cross-generational friction, maintaining positive sincere sentiment across all demographics.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 5: EMOJI WORDLE (TEXT CLUES INSTEAD OF PICTURES)
+           ================================================================ -->
+      <section class="slide" data-index="5" data-title="Emoji Wordle">
+        <div class="slide-tag">05 // Interactive Mini-Game #2</div>
+        <h2 class="slide-title">
+          The Generational <span class="glow-green">Emoji Wordle</span>
+        </h2>
+        <p class="slide-desc">
+          Guess the secret 5-letter emoji culture term in 6 tries. Clues are presented as rich text descriptions rather than images. Type on your keyboard or use virtual keys!
+        </p>
+
+        <div class="wordle-wrapper">
+          <!-- Board Area -->
+          <div class="wordle-board-area">
+            <div class="wordle-grid" id="wordle-grid">
+              <!-- 6x5 Grid rendered via JS -->
+            </div>
+
+            <!-- Virtual Keyboard -->
+            <div class="wordle-keyboard" id="wordle-keyboard">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Clue & Status Card -->
+          <div class="wordle-info-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; font-family:var(--font-mono); color:#10b981;">CURRENT PUZZLE</span>
+              <button class="nav-btn" onclick="resetWordleGame()" style="padding:4px 10px; font-size:11px;">
+                🔄 New Word
+              </button>
+            </div>
+
+            <div style="font-size:15px; font-weight:700; color:var(--text-white);" id="wordle-target-topic">
+              Topic: Modern Semiotics & Internet Slang
+            </div>
+
+            <div class="wordle-hint-box" id="wordle-hint-text">
+              💡 <strong>Text Clue:</strong> Gen Z supreme token for laughing until they expire (💀).
+            </div>
+
+            <div style="background:rgba(0,0,0,0.3); border-radius:10px; padding:12px; border:1px solid rgba(255,255,255,0.06); font-size:11px; color:var(--text-muted); line-height:1.5;">
+              <div style="margin-bottom:6px; font-weight:700; color:var(--text-light);">Tile Color Key:</div>
+              <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <span>🟩 Green: Correct letter & spot</span>
+                <span>🟨 Yellow: In word, wrong spot</span>
+                <span>⬛ Gray: Not in word</span>
+              </div>
+            </div>
+
+            <div id="wordle-message" style="min-height:24px; font-size:13px; font-weight:700; text-align:center;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 6: GUESS THE COUNTRY BY EMOJI
+           ================================================================ -->
+      <section class="slide" data-index="6" data-title="Guess the Country">
+        <div class="slide-tag">06 // Interactive Mini-Game #3</div>
+        <h2 class="slide-title">
+          Guess the Country by <span class="glow-gradient">Emoji Triad</span>
+        </h2>
+        <p class="slide-desc">
+          Test your global geographical and cultural acumen! Decrypt the 3 emojis describing a specific country, type your guess, and generate a new random puzzle every round.
+        </p>
+
+        <div class="country-game-layout">
+          <!-- Main Puzzle Card -->
+          <div class="country-card-main">
+            <div style="font-size:11px; font-family:var(--font-mono); color:#38bdf8; text-transform:uppercase; letter-spacing:0.12em;">
+              DECRYPT THE NATION
+            </div>
+
+            <div class="country-emoji-display" id="country-emoji-container">
+              🗼 🥖 🍷
+            </div>
+
+            <div class="country-input-row">
+              <input type="text" class="country-input" id="country-guess-input" placeholder="Type country name..." onkeydown="handleCountryKeyDown(event)">
+              <button class="nav-btn primary" onclick="submitCountryGuess()">
+                Submit Guess
+              </button>
+            </div>
+
+            <div class="country-feedback-box" id="country-feedback"></div>
+
+            <div style="display:flex; gap:10px;">
+              <button class="nav-btn" onclick="revealCountryHint()" style="font-size:11px; padding:6px 12px;">
+                💡 Give Me a Hint
+              </button>
+              <button class="nav-btn" onclick="generateNewCountryPuzzle()" style="font-size:11px; padding:6px 12px;">
+                🎲 Random New Puzzle
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats & Clue Panel -->
+          <div class="country-stats-panel">
+            <h3 style="font-size:15px; font-weight:700; color:var(--text-white);">Trivia Performance</h3>
+
+            <div class="country-stat-badge">
+              <span>Solved Countries:</span>
+              <strong style="color:#10b981; font-family:var(--font-mono);" id="country-solved-count">0</strong>
+            </div>
+            <div class="country-stat-badge">
+              <span>Current Streak:</span>
+              <strong style="color:#f59e0b; font-family:var(--font-mono);" id="country-streak-count">🔥 x0</strong>
+            </div>
+
+            <div id="country-hint-box" style="display:none; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); border-radius:12px; padding:12px; font-size:12px; color:#c7d2fe; line-height:1.45;">
+              <!-- Dynamic hint displayed here -->
+            </div>
+
+            <div style="background:rgba(0,0,0,0.25); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.06); font-size:11px; color:var(--text-muted); line-height:1.5;">
+              <strong style="color:#38bdf8;">Cultural Semiotics Note:</strong> Emojis synthesize national identity into quintessential signifiers: culinary heritage, geography, wildlife, and architecture.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 7: EMOJI AVATAR BUILDER
+           ================================================================ -->
+      <section class="slide" data-index="7" data-title="Avatar Builder">
+        <div class="slide-tag">07 // Interactive Creator Studio</div>
+        <h2 class="slide-title">
+          Interactive <span class="glow-pink">Emoji Avatar Builder</span>
+        </h2>
+        <p class="slide-desc">
+          Craft your custom generational avatar! Select a base emoji face, layer decorative accessories like hats, glasses, and glowing ambient auras.
+        </p>
+
+        <div class="avatar-builder-layout">
+          <!-- Canvas / Visual Composite Stage -->
+          <div class="avatar-stage-box">
+            <div class="avatar-canvas-preview" id="avatar-preview-canvas">
+              <div class="avatar-layer base" id="avatar-layer-base">😀</div>
+              <div class="avatar-layer hat" id="avatar-layer-hat"></div>
+              <div class="avatar-layer glasses" id="avatar-layer-glasses"></div>
+              <div class="avatar-layer accessory" id="avatar-layer-accessory"></div>
+            </div>
+
+            <div style="font-size:14px; font-weight:700; color:var(--text-white);" id="avatar-title-label">
+              "The Joyful Pioneer"
+            </div>
+
+            <div style="display:flex; gap:10px;">
+              <button class="nav-btn primary" onclick="randomizeAvatar()" style="font-size:11px; padding:6px 14px;">
+                🎲 Randomize
+              </button>
+              <button class="nav-btn" onclick="copyAvatarCode()" style="font-size:11px; padding:6px 14px;">
+                📋 Copy Glyph Stack
+              </button>
+            </div>
+          </div>
+
+          <!-- Controls Customizer -->
+          <div class="avatar-controls-box">
+            <!-- Base Face -->
+            <div class="avatar-picker-section">
+              <div class="avatar-picker-title">1. Base Face Glyph</div>
+              <div class="avatar-options-grid" id="avatar-base-options"></div>
+            </div>
+
+            <!-- Headwear -->
+            <div class="avatar-picker-section">
+              <div class="avatar-picker-title">2. Headwear / Hat</div>
+              <div class="avatar-options-grid" id="avatar-hat-options"></div>
+            </div>
+
+            <!-- Eyewear -->
+            <div class="avatar-picker-section">
+              <div class="avatar-picker-title">3. Eyewear / Glasses</div>
+              <div class="avatar-options-grid" id="avatar-glasses-options"></div>
+            </div>
+
+            <!-- Accessory -->
+            <div class="avatar-picker-section">
+              <div class="avatar-picker-title">4. Decorative Accent</div>
+              <div class="avatar-options-grid" id="avatar-accessory-options"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 8: TRIVIA CHALLENGE
+           ================================================================ -->
+      <section class="slide" data-index="8" data-title="Trivia Challenge">
+        <div class="slide-tag">08 // Interactive Knowledge Quiz</div>
+        <h2 class="slide-title">
+          Generational <span class="glow-gradient">Trivia Challenge</span>
+        </h2>
+        <p class="slide-desc">
+          Put your instincts to the test on intergenerational etiquette, courtroom contract precedents, and covert subtext meanings with instant scoring and feedback.
+        </p>
+
+        <div class="trivia-game-box">
+          <div class="trivia-status-bar">
+            <span class="trivia-q-num" id="trivia-q-counter">QUESTION 1 OF 6</span>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <span class="trivia-score-pill" id="trivia-streak-badge">🔥 STREAK: x0</span>
+              <span class="trivia-score-pill" id="trivia-score-badge">SCORE: 0 PTS</span>
+            </div>
+          </div>
+
+          <div class="trivia-question-text" id="trivia-question">
+            Loading Question...
+          </div>
+
+          <div class="trivia-answers-grid" id="trivia-options">
+            <!-- 4 Multiple Choice Options Injected via JS -->
+          </div>
+
+          <div class="trivia-feedback-panel" id="trivia-feedback">
+            <!-- Feedback & Explanation -->
+          </div>
+
+          <div style="display:flex; justify-content:flex-end;">
+            <button class="nav-btn primary" id="trivia-next-btn" onclick="nextTriviaQuestion()" style="display:none; padding:8px 18px;">
+              Next Question ➔
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 9: HISTORICAL EVOLUTION (DOCOMO TO UNICODE)
+           ================================================================ -->
+      <section class="slide" data-index="9" data-title="Historical Evolution">
+        <div class="slide-tag">09 // Historical Genesis & Global Standards</div>
+        <h2 class="slide-title">
+          From NTT DoCoMo to <span class="glow-pink">Universal Standard</span>
+        </h2>
+        <p class="slide-desc">
+          How 176 monochrome 12x12 pixel icons created in Tokyo transformed into an omnipresent global lingua franca preserved in the Museum of Modern Art.
+        </p>
+
+        <div class="history-timeline-track">
+          <div class="history-card active" onclick="highlightHistory(0)">
+            <div class="history-pin">📟</div>
+            <div class="history-year">1999 • Genesis in Tokyo</div>
+            <h3 class="history-title">Shigetaka Kurita</h3>
+            <p class="history-desc">
+              Designed 176 12x12 pixel pictograms for NTT DoCoMo pagers and early mobile internet (i-mode), inspired by weather symbols and manga kanji.
+            </p>
+          </div>
+
+          <div class="history-card" onclick="highlightHistory(1)">
+            <div class="history-pin">🌐</div>
+            <div class="history-year">2010 • Standardization</div>
+            <h3 class="history-title">Unicode 6.0 Integration</h3>
+            <p class="history-desc">
+              Unicode Consortium standardizes 722 emojis, ensuring cross-platform character parity and preventing mojibake (garbled text across telecom networks).
+            </p>
+          </div>
+
+          <div class="history-card" onclick="highlightHistory(2)">
+            <div class="history-pin">📱</div>
+            <div class="history-year">2011 • Smartphone Boom</div>
+            <h3 class="history-title">iOS & Android Keyboards</h3>
+            <p class="history-desc">
+              Apple embeds the emoji keyboard into iOS 5; Google adds native Android support. In 2015, Oxford Dictionaries names 😂 Word of the Year.
+            </p>
+          </div>
+
+          <div class="history-card" onclick="highlightHistory(3)">
+            <div class="history-pin">🏛️</div>
+            <div class="history-year">2016+ • MoMA & Legal Era</div>
+            <h3 class="history-title">Museum of Modern Art</h3>
+            <p class="history-desc">
+              MoMA acquires Kurita's original 176 glyph set for its permanent architecture and design collection. Global courts rule emojis carry binding legal intent.
+            </p>
+          </div>
+        </div>
+
+        <div class="moma-tribute-box">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:36px;">🎨</div>
+            <div>
+              <div style="font-size:14px; font-weight:700; color:var(--text-white);">The MoMA Design Philosophy</div>
+              <div style="font-size:12px; color:var(--text-muted);">
+                "Emojis are a revolutionary visual shorthand that reintroduces human emotion, tone, and inflection into the sterile realm of digital text."
+              </div>
+            </div>
+          </div>
+          <button class="nav-btn" onclick="toggleDoCoMoDemo()" id="docomo-toggle-btn" style="white-space:nowrap; font-size:11px;">
+            Toggle 12px Pixel View
+          </button>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 10: "CATCH THE EMOJI" ARCADE MINI-GAME
+           ================================================================ -->
+      <section class="slide" data-index="10" data-title="Catch the Emoji">
+        <div class="slide-tag">10 // Interactive Arcade Mini-Game</div>
+        <h2 class="slide-title">
+          Arcade Action: <span class="glow-green">"Catch the Emoji"</span>
+        </h2>
+        <p class="slide-desc">
+          Click or tap falling emojis to catch as many high-value glyphs as possible before the timer expires. Dodge the dangerous bombs to avoid severe score penalties!
+        </p>
+
+        <div class="arcade-container">
+          <div class="arcade-hud">
+            <div class="arcade-hud-item">SCORE: <span class="val" id="arcade-score">0</span></div>
+            <div class="arcade-hud-item">COMBO: <span class="val" id="arcade-combo">x1</span></div>
+            <div class="arcade-hud-item">LIVES: <span class="val" id="arcade-lives">❤️❤️❤️</span></div>
+            <div class="arcade-hud-item">TIME: <span class="val" id="arcade-timer">30s</span></div>
+            <div class="arcade-hud-item">HIGH SCORE: <span class="val" id="arcade-high-score">0</span></div>
+          </div>
+
+          <!-- Arcade Playing Stage -->
+          <div class="arcade-stage" id="arcade-stage">
+            <!-- Falling emojis and floating scores rendered via JS -->
+            <div class="arcade-overlay" id="arcade-overlay">
+              <div style="font-size:46px;">🕹️⚡</div>
+              <div style="font-size:22px; font-weight:800; color:var(--text-white);" id="arcade-overlay-title">Ready to Catch?</div>
+              <p style="font-size:12px; color:var(--text-muted); max-width:380px; text-align:center;">
+                Click emojis for points (💖 +30, ⭐ +20, 💀 +15, 😂 +10). Avoid the bombs (💣 -50 pts)!
+              </p>
+              <button class="nav-btn primary" onclick="startArcadeGame()" style="padding:10px 24px; font-size:14px;">
+                Start Game ▶️
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           SLIDE 11: CLOSING / THANK YOU (FLOATING EMOJIS & GLOWING HEARTS)
+           ================================================================ -->
+      <section class="slide" data-index="11" data-title="Thank You">
+        <div class="thankyou-wrapper" id="thankyou-stage">
+          <!-- Floating background elements rendered dynamically -->
+
+          <div class="thankyou-card">
+            <div style="font-size:52px; margin-bottom:12px; animation: gentle-pulse 3s infinite ease-in-out;">💖🙏✨</div>
+            <div class="slide-tag" style="margin:0 auto 12px auto;">11 // Presentation Finale</div>
+            <h2 class="slide-title" style="font-size:32px; margin-bottom:12px;">
+              Thank You for <span class="glow-gradient">Exploring!</span>
+            </h2>
+            <p class="slide-desc" style="margin:0 auto 24px auto; max-width:540px; font-size:13px;">
+              Emojis are not language decay—they are digital kinesics restoring vocal inflection, emotional warmth, and playful community to flat text. May your group chats remain fluent, fun, and forever no-cap! 🧢✨
+            </p>
+
+            <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
+              <button class="nav-btn primary" onclick="goToSlide(1)">
+                🔄 Replay Deck from Slide 1
+              </button>
+              <button class="nav-btn" onclick="goToSlide(10)">
+                🎮 Play Arcade Game Again
+              </button>
+              <button class="nav-btn" onclick="goToSlide(7)">
+                🎨 Build Another Avatar
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /deck-stage -->
+
+    <!-- Deck Footer Controls -->
+    <footer class="deck-footer">
+      <div class="btn-nav-group">
+        <button class="nav-btn" id="prev-btn" onclick="prevSlide()">
+          <span>&#8592;</span> Previous <span class="key-hint">Left</span>
+        </button>
+      </div>
+
+      <!-- Slide Indicator Dots -->
+      <nav class="dots-nav" id="dots-container" aria-label="Slide Navigation">
+        <!-- Injected via JS -->
+      </nav>
+
+      <div class="btn-nav-group">
+        <button class="nav-btn primary" id="next-btn" onclick="nextSlide()">
+          Next <span>&#8594;</span> <span class="key-hint">Right</span>
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ==========================================================================
+       16. PYTHON LOGIC BEHIND-THE-SCENES (DATA STRUCTURES & PROCESSING)
+       ========================================================================== */
+  -->
+  <script type="text/python" id="python-backend">
+# Python logic running behind-the-scenes for data processing and game state management.
+from browser import window
+import random
+import math
+
+class EmojiDataProcessor:
+    """Processes global emoji distribution models and calculates generational variances."""
+    def __init__(self):
+        self.stats = [
+            {"glyph": "😂", "name": "Tears of Joy", "global": 10.2, "genz": 2.4, "workplace": 5.8},
+            {"glyph": "❤️", "name": "Red Heart", "global": 8.4, "genz": 8.1, "workplace": 7.2},
+            {"glyph": "🤣", "name": "Rolling Laughter", "global": 6.8, "genz": 1.9, "workplace": 4.1},
+            {"glyph": "👍", "name": "Thumbs Up", "global": 5.4, "genz": 1.1, "workplace": 14.5},
+            {"glyph": "😭", "name": "Loudly Crying", "global": 4.9, "genz": 9.8, "workplace": 2.2},
+            {"glyph": "🙏", "name": "Folded Hands", "global": 4.1, "genz": 2.7, "workplace": 6.9},
+            {"glyph": "💀", "name": "Skull (Laughter)", "global": 3.9, "genz": 11.4, "workplace": 0.8},
+            {"glyph": "🥰", "name": "Smiling with Hearts", "global": 3.5, "genz": 4.2, "workplace": 3.1}
+        ]
+
+    def get_stats_for_category(self, cat):
+        return sorted(self.stats, key=lambda x: x.get(cat, x["global"]), reverse=True)
+
+class CountryTriviaEngine:
+    """Generates non-repeating geographic trivia puzzles."""
+    def __init__(self):
+        self.pool = [
+            {"name": "France", "emojis": "🗼 🥖 🍷", "continent": "Europe", "capital": "Paris"},
+            {"name": "Japan", "emojis": "🍣 🗻 🗾", "continent": "Asia", "capital": "Tokyo"},
+            {"name": "Italy", "emojis": "🍕 🏛️ 🛵", "continent": "Europe", "capital": "Rome"},
+            {"name": "Australia", "emojis": "🦘 🐨 🏉", "continent": "Oceania", "capital": "Canberra"},
+            {"name": "Mexico", "emojis": "🌮 🎺 🌵", "continent": "North America", "capital": "Mexico City"},
+            {"name": "Canada", "emojis": "🍁 🏒 🥞", "continent": "North America", "capital": "Ottawa"},
+            {"name": "Brazil", "emojis": "☕ ⚽ 💃", "continent": "South America", "capital": "Brasília"},
+            {"name": "Germany", "emojis": "🥨 🍺 🏰", "continent": "Europe", "capital": "Berlin"},
+            {"name": "United States", "emojis": "🗽 🍔 🏈", "continent": "North America", "capital": "Washington, D.C."},
+            {"name": "United Kingdom", "emojis": "🫖 🌧️ 👑", "continent": "Europe", "capital": "London"},
+            {"name": "India", "emojis": "🍛 🐅 🛕", "continent": "Asia", "capital": "New Delhi"},
+            {"name": "Egypt", "emojis": "🏜️ 🐪 🏛️", "continent": "Africa", "capital": "Cairo"}
+        ]
+        self.used = []
+
+    def get_random_country(self):
+        available = [c for c in self.pool if c["name"] not in self.used]
+        if not available:
+            self.used = []
+            available = self.pool
+        chosen = random.choice(available)
+        self.used.append(chosen["name"])
+        return chosen
+
+# Instantiate and bridge to window for seamless JS consumption
+py_processor = EmojiDataProcessor()
+py_country_engine = CountryTriviaEngine()
+
+window.PythonBridge = {
+    "getStats": lambda cat: py_processor.get_stats_for_category(cat),
+    "getCountry": lambda: py_country_engine.get_random_country()
+}
+  </script>
+
+  <!-- ==========================================================================
+       17. JAVASCRIPT: CONTROLLERS, THREE.JS 3D ENGINES & GAME SYSTEMS
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       A. DECK SLIDE CONTROLLER & STATE
+       ========================================================================== */
+    const TOTAL_SLIDES = 11;
+    let currentSlide = 1;
+    let isAnimating = false;
+    let soundEnabled = true;
+
+    const slides = document.querySelectorAll('.slide');
+    const progressFill = document.getElementById('progress-fill');
+    const slideNumBadge = document.getElementById('current-slide-num');
+    const dotsContainer = document.getElementById('dots-container');
+    const brandBadge = document.getElementById('brand-badge');
+
+    // Dynamic brand badges for 11 slides
+    const slideBadges = ['🎭', '📖', '🧩', '📊', '🟩', '🌍', '🎨', '🎯', '⏳', '🕹️', '💖'];
+
+    // Generate Nav Dots with Tooltips
+    slides.forEach((slide, idx) => {
+      const dot = document.createElement('div');
+      dot.className = `nav-dot ${idx === 0 ? 'active' : ''}`;
+      dot.setAttribute('data-index', idx + 1);
+      dot.setAttribute('data-title', `${idx + 1}. ${slide.getAttribute('data-title') || 'Slide'}`);
+      dot.onclick = () => goToSlide(idx + 1);
+      dotsContainer.appendChild(dot);
+    });
+
+    const navDots = document.querySelectorAll('.nav-dot');
+
+    function updateSlideUI() {
+      const progressPercent = (currentSlide / TOTAL_SLIDES) * 100;
+      progressFill.style.width = `${progressPercent}%`;
+      
+      // Keep slide counter elegant: show slide number up to 10, and on 11 show 10 (or Finale)
+      if (currentSlide <= 10) {
+        slideNumBadge.textContent = String(currentSlide).padStart(2, '0');
+        document.getElementById('total-slide-num').textContent = "10";
+      } else {
+        slideNumBadge.textContent = "11";
+        document.getElementById('total-slide-num').textContent = "11";
+      }
+
+      brandBadge.textContent = slideBadges[currentSlide - 1] || '🎭';
+
+      navDots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentSlide - 1);
+      });
+
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      prevBtn.style.opacity = currentSlide === 1 ? '0.5' : '1';
+      prevBtn.style.pointerEvents = currentSlide === 1 ? 'none' : 'auto';
+
+      if (currentSlide === TOTAL_SLIDES) {
+        nextBtn.innerHTML = `Finish <span>✓</span>`;
+      } else {
+        nextBtn.innerHTML = `Next <span>&#8594;</span> <span class="key-hint">Right</span>`;
+      }
+
+      updateAmbientThreeLight(currentSlide);
+
+      // Trigger specific slide initializations upon entry
+      if (currentSlide === 4) renderBarChart('global');
+      if (currentSlide === 11) initThankYouFloatingElements();
+    }
+
+    function goToSlide(targetIndex) {
+      if (isAnimating || targetIndex === currentSlide || targetIndex < 1 || targetIndex > TOTAL_SLIDES) return;
+      isAnimating = true;
+      playSynthesizedSound('whoosh');
+
+      const currentSlideEl = document.querySelector(`.slide[data-index="${currentSlide}"]`);
+      const nextSlideEl = document.querySelector(`.slide[data-index="${targetIndex}"]`);
+
+      if (targetIndex > currentSlide) {
+        currentSlideEl.classList.remove('active');
+        currentSlideEl.classList.add('exit-left');
+      } else {
+        currentSlideEl.classList.remove('active', 'exit-left');
+      }
+
+      setTimeout(() => {
+        currentSlideEl.classList.remove('exit-left');
+      }, 500);
+
+      nextSlideEl.classList.add('active');
+      currentSlide = targetIndex;
+      updateSlideUI();
+
+      setTimeout(() => {
+        isAnimating = false;
+      }, 500);
+    }
+
+    function nextSlide() {
+      if (currentSlide < TOTAL_SLIDES) {
+        goToSlide(currentSlide + 1);
+      } else {
+        playSynthesizedSound('chime');
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+
+    // Keyboard navigation routing
+    window.addEventListener('keydown', (e) => {
+      // Do not hijack typing if focused inside an input box
+      if (e.target.tagName === 'INPUT' && e.target.type === 'text') return;
+
+      // Smart routing for Wordle on Slide 5
+      if (currentSlide === 5) {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+          e.preventDefault();
+          nextSlide();
+          return;
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          prevSlide();
+          return;
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          handleWordleKey('ENTER');
+          return;
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          handleWordleKey('⌫');
+          return;
+        } else if (/^[a-zA-Z]$/.test(e.key)) {
+          e.preventDefault();
+          handleWordleKey(e.key.toUpperCase());
+          return;
+        }
+      }
+
+      // Standard presentation deck controls
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(1);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(TOTAL_SLIDES);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'm':
+        case 'M':
+          toggleAudio();
+          break;
+      }
+    });
+
+    function toggleFullscreen() {
+      const container = document.getElementById('deck-container');
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+    document.getElementById('fullscreen-btn').onclick = toggleFullscreen;
+
+    /* ==========================================================================
+       B. WEB AUDIO SYNTHESIZER
+       ========================================================================== */
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playSynthesizedSound(type) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'whoosh') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(320, now + 0.12);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        } else if (type === 'click') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(580, now);
+          osc.frequency.exponentialRampToValueAtTime(120, now + 0.05);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          osc.start(now);
+          osc.stop(now + 0.07);
+        } else if (type === 'chime') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.15);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.36);
+        } else if (type === 'success') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.setValueAtTime(554.37, now + 0.08);
+          osc.frequency.setValueAtTime(659.25, now + 0.16);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(190, now);
+          osc.frequency.linearRampToValueAtTime(110, now + 0.18);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        } else if (type === 'flip') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } else if (type === 'catch') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          osc.frequency.exponentialRampToValueAtTime(900, now + 0.08);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.start(now);
+          osc.stop(now + 0.11);
+        } else if (type === 'bomb') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(120, now);
+          osc.frequency.linearRampToValueAtTime(40, now + 0.35);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.42);
+        }
+      } catch (err) {}
+    }
+
+    function toggleAudio() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('audio-toggle-btn');
+      btn.textContent = soundEnabled ? '🔊' : '🔇';
+      btn.style.opacity = soundEnabled ? '1' : '0.5';
+      if (soundEnabled) playSynthesizedSound('click');
+    }
+    document.getElementById('audio-toggle-btn').onclick = toggleAudio;
+
+    /* ==========================================================================
+       C. THREE.JS 3D SCENES:
+          1) AMBIENT PARTICLE BACKGROUND
+          2) SLIDE 1: 3D SMILING EMOJI WITH REAL-TIME EYE/GAZE TRACKING & 360° SPIN
+       ========================================================================== */
+    let bgScene, bgCamera, bgRenderer, bgParticles, bgLight;
+
+    function initThreeBackground() {
+      const canvas = document.getElementById('three-bg-canvas');
+      bgScene = new THREE.Scene();
+      bgCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+      bgCamera.position.z = 25;
+
+      bgRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      bgRenderer.setSize(window.innerWidth, window.innerHeight);
+      bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const particleCount = 240;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+
+      const colorPalette = [
+        new THREE.Color(0x38bdf8),
+        new THREE.Color(0xf59e0b),
+        new THREE.Color(0xec4899),
+        new THREE.Color(0x10b981),
+        new THREE.Color(0x8b5cf6)
+      ];
+
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 65;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 45;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 35;
+        const c = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+        colors[i * 3] = c.r;
+        colors[i * 3 + 1] = c.g;
+        colors[i * 3 + 2] = c.b;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: 0.65,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.45,
+        blending: THREE.AdditiveBlending
+      });
+
+      bgParticles = new THREE.Points(geometry, material);
+      bgScene.add(bgParticles);
+
+      bgLight = new THREE.PointLight(0x6366f1, 2, 80);
+      bgLight.position.set(0, 10, 20);
+      bgScene.add(bgLight);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (bgParticles) {
+          bgParticles.rotation.y += 0.0006;
+          bgParticles.rotation.x += 0.0003;
+        }
+        bgRenderer.render(bgScene, bgCamera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        bgCamera.aspect = window.innerWidth / window.innerHeight;
+        bgCamera.updateProjectionMatrix();
+        bgRenderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    function updateAmbientThreeLight(slideNum) {
+      if (!bgLight) return;
+      const themeColors = [
+        0x6366f1, 0xec4899, 0x10b981, 0x06b6d4, 0x8b5cf6, 
+        0x38bdf8, 0xec4899, 0xf59e0b, 0x06b6d4, 0x10b981, 0xec4899
+      ];
+      const targetColor = new THREE.Color(themeColors[(slideNum - 1) % themeColors.length]);
+      bgLight.color.lerp(targetColor, 0.8);
+    }
+
+    // SLIDE 1: 3D SMILING EMOJI WITH MOUSE TRACKING PUPILS / GAZE
+    let heroScene, heroCamera, heroRenderer, heroEmojiGroup;
+    let pupilLeft, pupilRight, eyeLeftGroup, eyeRightGroup;
+    let isDraggingHero = false, prevMouseX = 0, prevMouseY = 0;
+    let targetGazeX = 0, targetGazeY = 0;
+    let currentGazeX = 0, currentGazeY = 0;
+
+    function initHeroThreeScene() {
+      const container = document.querySelector('.hero-3d-wrapper');
+      const canvas = document.getElementById('hero-canvas-3d');
+      if (!container || !canvas) return;
+
+      heroScene = new THREE.Scene();
+      heroCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+      heroCamera.position.z = 5.2;
+
+      heroRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      heroRenderer.setSize(container.clientWidth, container.clientHeight);
+      heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+      heroScene.add(ambientLight);
+
+      const mainLight = new THREE.DirectionalLight(0xfff5ea, 1.8);
+      mainLight.position.set(4, 6, 5);
+      heroScene.add(mainLight);
+
+      const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
+      rimLight.position.set(-5, -3, 3);
+      heroScene.add(rimLight);
+
+      heroEmojiGroup = new THREE.Group();
+      heroScene.add(heroEmojiGroup);
+
+      // 1. Emoji Head: Rich Glossy Yellow Sphere
+      const headGeo = new THREE.SphereGeometry(1.5, 64, 64);
+      const headMat = new THREE.MeshStandardMaterial({
+        color: 0xffcb2b,
+        metalness: 0.12,
+        roughness: 0.22,
+        emissive: 0xffa000,
+        emissiveIntensity: 0.08
+      });
+      const headMesh = new THREE.Mesh(headGeo, headMat);
+      heroEmojiGroup.add(headMesh);
+
+      // 2. Eyes & Pupils with Gaze Tracking
+      const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 });
+      const pupilMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.1 });
+      const glintMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+      // Left Eye
+      eyeLeftGroup = new THREE.Group();
+      eyeLeftGroup.position.set(-0.46, 0.38, 1.34);
+      const leftSclera = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), eyeWhiteMat);
+      eyeLeftGroup.add(leftSclera);
+
+      pupilLeft = new THREE.Mesh(new THREE.SphereGeometry(0.14, 32, 32), pupilMat);
+      pupilLeft.position.set(0, 0, 0.2);
+      const glintLeft = new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 16), glintMat);
+      glintLeft.position.set(0.04, 0.04, 0.12);
+      pupilLeft.add(glintLeft);
+      eyeLeftGroup.add(pupilLeft);
+      heroEmojiGroup.add(eyeLeftGroup);
+
+      // Right Eye
+      eyeRightGroup = new THREE.Group();
+      eyeRightGroup.position.set(0.46, 0.38, 1.34);
+      const rightSclera = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), eyeWhiteMat);
+      eyeRightGroup.add(rightSclera);
+
+      pupilRight = new THREE.Mesh(new THREE.SphereGeometry(0.14, 32, 32), pupilMat);
+      pupilRight.position.set(0, 0, 0.2);
+      const glintRight = new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 16), glintMat);
+      glintRight.position.set(0.04, 0.04, 0.12);
+      pupilRight.add(glintRight);
+      eyeRightGroup.add(pupilRight);
+      heroEmojiGroup.add(eyeRightGroup);
+
+      // 3. Cute Rosy Cheeks
+      const cheekMat = new THREE.MeshBasicMaterial({ color: 0xff6b81, transparent: true, opacity: 0.45 });
+      const leftCheek = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 24), cheekMat);
+      leftCheek.position.set(-0.82, -0.05, 1.25);
+      leftCheek.scale.set(1.1, 0.7, 0.3);
+      heroEmojiGroup.add(leftCheek);
+
+      const rightCheek = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 24), cheekMat);
+      rightCheek.position.set(0.82, -0.05, 1.25);
+      rightCheek.scale.set(1.1, 0.7, 0.3);
+      heroEmojiGroup.add(rightCheek);
+
+      // 4. Cheerful 3D Smile (Curved Torus Arc)
+      const smileGeo = new THREE.TorusGeometry(0.65, 0.11, 16, 64, Math.PI * 0.88);
+      const smileMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.3 });
+      const smileMesh = new THREE.Mesh(smileGeo, smileMat);
+      smileMesh.position.set(0, -0.16, 1.32);
+      smileMesh.rotation.z = Math.PI * 1.06;
+      heroEmojiGroup.add(smileMesh);
+
+      // Mouse Gaze Tracking Listener across screen
+      window.addEventListener('mousemove', (e) => {
+        targetGazeX = (e.clientX / window.innerWidth) * 2 - 1;
+        targetGazeY = -(e.clientY / window.innerHeight) * 2 + 1;
+      });
+
+      // Mouse drag rotation controls
+      canvas.addEventListener('mousedown', (e) => {
+        isDraggingHero = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+      window.addEventListener('mouseup', () => { isDraggingHero = false; });
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isDraggingHero) return;
+        heroEmojiGroup.rotation.y += (e.clientX - prevMouseX) * 0.012;
+        heroEmojiGroup.rotation.x += (e.clientY - prevMouseY) * 0.012;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+
+      // Touch controls for mobile
+      canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDraggingHero = true;
+          prevMouseX = e.touches[0].clientX;
+          prevMouseY = e.touches[0].clientY;
+        }
+      });
+      window.addEventListener('touchend', () => { isDraggingHero = false; });
+      canvas.addEventListener('touchmove', (e) => {
+        if (!isDraggingHero || e.touches.length !== 1) return;
+        heroEmojiGroup.rotation.y += (e.touches[0].clientX - prevMouseX) * 0.015;
+        heroEmojiGroup.rotation.x += (e.touches[0].clientY - prevMouseY) * 0.015;
+        prevMouseX = e.touches[0].clientX;
+        prevMouseY = e.touches[0].clientY;
+      });
+
+      let clock = new THREE.Clock();
+
+      function animateHero() {
+        requestAnimationFrame(animateHero);
+        const delta = clock.getDelta();
+        const elapsedTime = clock.getElapsedTime();
+
+        // 360-degree rotation around Y axis continuously
+        if (!isDraggingHero) {
+          heroEmojiGroup.rotation.y += 0.008;
+          heroEmojiGroup.position.y = Math.sin(elapsedTime * 1.8) * 0.08;
+        }
+
+        // Smooth Eye Pupil Gaze Tracking
+        currentGazeX += (targetGazeX - currentGazeX) * 0.08;
+        currentGazeY += (targetGazeY - currentGazeY) * 0.08;
+
+        const maxEyeShift = 0.1;
+        pupilLeft.position.x = currentGazeX * maxEyeShift;
+        pupilLeft.position.y = currentGazeY * maxEyeShift;
+        pupilRight.position.x = currentGazeX * maxEyeShift;
+        pupilRight.position.y = currentGazeY * maxEyeShift;
+
+        // Slight eye socket orientation tilt
+        eyeLeftGroup.rotation.y = currentGazeX * 0.25;
+        eyeLeftGroup.rotation.x = -currentGazeY * 0.25;
+        eyeRightGroup.rotation.y = currentGazeX * 0.25;
+        eyeRightGroup.rotation.x = -currentGazeY * 0.25;
+
+        heroRenderer.render(heroScene, heroCamera);
+      }
+      animateHero();
+
+      window.addEventListener('resize', () => {
+        if (container.clientWidth > 0 && container.clientHeight > 0) {
+          heroCamera.aspect = container.clientWidth / container.clientHeight;
+          heroCamera.updateProjectionMatrix();
+          heroRenderer.setSize(container.clientWidth, container.clientHeight);
+        }
+      });
+    }
+
+    /* ==========================================================================
+       D. SLIDE 2: EMOJI DICTIONARY (GEN Z VS GEN X PERSPECTIVE)
+       ========================================================================== */
+    const dictionaryDatabase = [
+      {
+        glyph: '👍',
+        name: 'Thumbs Up',
+        category: 'hazard',
+        genx: 'Gen X: "Acknowledged & approved! Direct, efficient, supportive affirmative sign-off."',
+        genz: 'Gen Z: "Hostile dismissal. \'You are not worth my time. Conversation violently terminated.\'"',
+        lore: '84% of Gen Z flag this as high-stress passive aggression in workplace Slack.'
+      },
+      {
+        glyph: '🙂',
+        name: 'Slightly Smiling',
+        category: 'hazard',
+        genx: 'Gen X: "Pleasant, polite, friendly warm expression in everyday communication."',
+        genz: 'Gen Z: "Psychopathic masking. Suppressed unbridled rage. \'Everything is on fire and I despise you.\'"',
+        lore: 'Interpreted as deadpan malice when sent by management.'
+      },
+      {
+        glyph: '💀',
+        name: 'Skull Face',
+        category: 'slang',
+        genx: 'Gen X: "Physical mortality, poison, dangerous hazard, Halloween skeleton."',
+        genz: 'Gen Z: "Wheezing laughter! Short for \'I am dead / dying of laughter.\' Replaced 😂."',
+        lore: 'The supreme laughter token among internet youth since 2021.'
+      },
+      {
+        glyph: '🧢',
+        name: 'Blue Billed Cap',
+        category: 'slang',
+        genx: 'Gen X: "Baseball hat, sunny day protection, casual sporting apparel."',
+        genz: 'Gen Z: "\'Cap\' = Lie / Falsehood. \'Stop making things up, you are totally fabricating.\'"',
+        lore: 'Derived from AAVE (\'no cap\' = no lie). Used to call out exaggerations.'
+      },
+      {
+        glyph: '🤡',
+        name: 'Clown Face',
+        category: 'slang',
+        genx: 'Gen X: "Circus entertainer, birthday party performer, amusement park."',
+        genz: 'Gen Z: "\'You played yourself.\' Foolish naive behavior, being thoroughly duped."',
+        lore: 'Universal signifier for admitting personal humiliation.'
+      },
+      {
+        glyph: '💅',
+        name: 'Nail Polish',
+        category: 'praise',
+        genx: 'Gen X: "Manicure, cosmetics appointment, personal beauty grooming."',
+        genz: 'Gen Z: "Sassy mic drop! Unbothered superiority, spitting undeniable truth."',
+        lore: 'Born in ball culture; denotes effortless untouchable confidence.'
+      },
+      {
+        glyph: '🫠',
+        name: 'Melting Face',
+        category: 'hazard',
+        genx: 'Gen X: "Extreme summer heatwave, high humidity, ice cream melting."',
+        genz: 'Gen Z: "Smiling through acute dread, social embarrassment, slow burnout."',
+        lore: 'Unicode 14.0 favorite for surviving modern cognitive overload.'
+      },
+      {
+        glyph: '☕',
+        name: 'Hot Beverage',
+        category: 'slang',
+        genx: 'Gen X: "Morning coffee break, let us grab an espresso and catch up."',
+        genz: 'Gen Z: "\'Sipping tea\' = observing drama unfold; sarcastic commentary."',
+        lore: 'Signals \'None of my business, but deeply fascinating.\''
+      }
+    ];
+
+    function renderDictionaryCards(cards) {
+      const container = document.getElementById('dict-cards-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      cards.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'dict-card';
+        card.onclick = () => {
+          playSynthesizedSound('click');
+          alert(`[GENERATIONAL EMOJI DECRYPTION]\n\nEmoji: ${item.glyph} (${item.name})\n\n${item.genx}\n\n${item.genz}\n\nCultural Lore: ${item.lore}`);
+        };
+
+        const badgeClass = item.category === 'hazard' ? 'badge-hazard' : (item.category === 'praise' ? 'badge-genx' : 'badge-genz');
+        const badgeLabel = item.category === 'hazard' ? 'WORKPLACE HAZARD' : (item.category === 'praise' ? 'SASS & PRAISE' : 'YOUTH INVERSION');
+
+        card.innerHTML = `
+          <div class="dict-card-top">
+            <span class="dict-glyph">${item.glyph}</span>
+            <span class="dict-badge ${badgeClass}">${badgeLabel}</span>
+          </div>
+          <div style="font-weight:700; font-size:13px; color:var(--text-white);">${item.name}</div>
+          <div class="dict-box-genx">${item.genx}</div>
+          <div class="dict-box-genz">${item.genz}</div>
+          <div class="dict-subtext">💡 ${item.lore}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterDict(category, btnEl) {
+      playSynthesizedSound('click');
+      document.querySelectorAll('.dict-filter-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+
+      if (category === 'all') {
+        renderDictionaryCards(dictionaryDatabase);
+      } else {
+        const filtered = dictionaryDatabase.filter(item => item.category === category);
+        renderDictionaryCards(filtered);
+      }
+    }
+
+    function searchDict(query) {
+      const q = query.toLowerCase().trim();
+      const filtered = dictionaryDatabase.filter(item => 
+        item.name.toLowerCase().includes(q) || 
+        item.glyph.includes(q) || 
+        item.genz.toLowerCase().includes(q) || 
+        item.genx.toLowerCase().includes(q)
+      );
+      renderDictionaryCards(filtered);
+    }
+
+    /* ==========================================================================
+       E. SLIDE 3: MEMORY MATCH GAME
+       ========================================================================== */
+    const memoryCardData = [
+      { id: 1, type: 'glyph', content: '💀', matchId: 1 },
+      { id: 2, type: 'text', content: 'Dying of Laughter', matchId: 1 },
+      { id: 3, type: 'glyph', content: '🧢', matchId: 2 },
+      { id: 4, type: 'text', content: 'Calling Out a Lie', matchId: 2 },
+      { id: 5, type: 'glyph', content: '👍', matchId: 3 },
+      { id: 6, type: 'text', content: 'Dismissive Hostility', matchId: 3 },
+      { id: 7, type: 'glyph', content: '🤡', matchId: 4 },
+      { id: 8, type: 'text', content: 'Acting Foolish', matchId: 4 },
+      { id: 9, type: 'glyph', content: '💅', matchId: 5 },
+      { id: 10, type: 'text', content: 'Sassy Mic Drop', matchId: 5 },
+      { id: 11, type: 'glyph', content: '🫠', matchId: 6 },
+      { id: 12, type: 'text', content: 'Smiling Through Dread', matchId: 6 }
+    ];
+
+    let flippedMemoryCards = [];
+    let matchedPairsCount = 0;
+    let memoryMoves = 0;
+    let memoryTimer = null;
+    let memorySeconds = 0;
+    let memoryGameStarted = false;
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initMemoryGame() {
+      playSynthesizedSound('click');
+      clearInterval(memoryTimer);
+      memoryTimer = null;
+      memorySeconds = 0;
+      memoryMoves = 0;
+      matchedPairsCount = 0;
+      flippedMemoryCards = [];
+      memoryGameStarted = false;
+
+      document.getElementById('mem-moves').textContent = '0';
+      document.getElementById('mem-matches').textContent = '0 / 6';
+      document.getElementById('mem-timer').textContent = '00:00';
+      document.getElementById('mem-win-banner').style.display = 'none';
+
+      const board = document.getElementById('memory-board');
+      board.innerHTML = '';
+
+      const deck = shuffleArray(memoryCardData);
+
+      deck.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.setAttribute('data-id', item.id);
+        card.setAttribute('data-match', item.matchId);
+
+        card.innerHTML = `
+          <div class="memory-card-front">?</div>
+          <div class="memory-card-back">
+            ${item.type === 'glyph' 
+              ? `<span class="memory-content-glyph">${item.content}</span>` 
+              : `<span class="memory-content-text">${item.content}</span>`}
+          </div>
+        `;
+
+        card.onclick = () => onMemoryCardClick(card, item);
+        board.appendChild(card);
+      });
+    }
+
+    function startMemoryTimer() {
+      if (!memoryGameStarted) {
+        memoryGameStarted = true;
+        memoryTimer = setInterval(() => {
+          memorySeconds++;
+          const mins = String(Math.floor(memorySeconds / 60)).padStart(2, '0');
+          const secs = String(memorySeconds % 60).padStart(2, '0');
+          document.getElementById('mem-timer').textContent = `${mins}:${secs}`;
+        }, 1000);
+      }
+    }
+
+    function onMemoryCardClick(cardEl, item) {
+      if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched') || flippedMemoryCards.length >= 2) return;
+
+      startMemoryTimer();
+      playSynthesizedSound('flip');
+      cardEl.classList.add('flipped');
+      flippedMemoryCards.push({ el: cardEl, data: item });
+
+      if (flippedMemoryCards.length === 2) {
+        memoryMoves++;
+        document.getElementById('mem-moves').textContent = memoryMoves;
+
+        const [first, second] = flippedMemoryCards;
+        if (first.data.matchId === second.data.matchId) {
+          // Successful Match
+          setTimeout(() => {
+            playSynthesizedSound('success');
+            first.el.classList.add('matched');
+            second.el.classList.add('matched');
+            matchedPairsCount++;
+            document.getElementById('mem-matches').textContent = `${matchedPairsCount} / 6`;
+            flippedMemoryCards = [];
+
+            if (matchedPairsCount === 6) {
+              clearInterval(memoryTimer);
+              setTimeout(() => {
+                playSynthesizedSound('chime');
+                document.getElementById('mem-win-summary').textContent = 
+                  `You decoded all 6 generational pairs in ${memoryMoves} moves and ${document.getElementById('mem-timer').textContent}!`;
+                document.getElementById('mem-win-banner').style.display = 'flex';
+              }, 400);
+            }
+          }, 350);
+        } else {
+          // Mismatch
+          setTimeout(() => {
+            playSynthesizedSound('wrong');
+            first.el.classList.remove('flipped');
+            second.el.classList.remove('flipped');
+            flippedMemoryCards = [];
+          }, 850);
+        }
+      }
+    }
+
+    /* ==========================================================================
+       F. SLIDE 4: POPULAR EMOJI ANALYTICS (STATISTICAL BAR CHARTS)
+       ========================================================================== */
+    const analyticsDataSets = {
+      global: [
+        { glyph: '😂', label: 'Tears of Joy', pct: 10.2, vol: '7.4B daily' },
+        { glyph: '❤️', label: 'Red Heart', pct: 8.4, vol: '6.1B daily' },
+        { glyph: '🤣', label: 'Rolling Laughter', pct: 6.8, vol: '4.9B daily' },
+        { glyph: '👍', label: 'Thumbs Up', pct: 5.4, vol: '3.9B daily' },
+        { glyph: '😭', label: 'Loudly Crying', pct: 4.9, vol: '3.6B daily' },
+        { glyph: '🙏', label: 'Folded Hands', pct: 4.1, vol: '3.0B daily' },
+        { glyph: '💀', label: 'Skull (Rising)', pct: 3.9, vol: '2.8B daily' },
+        { glyph: '🥰', label: 'Hearts Smiling', pct: 3.5, vol: '2.5B daily' }
+      ],
+      genz: [
+        { glyph: '💀', label: 'Skull (Laughter)', pct: 11.4, vol: 'Primary Laughter' },
+        { glyph: '😭', label: 'Crying (Hilarity)', pct: 9.8, vol: 'Dramatic Overjoy' },
+        { glyph: '❤️', label: 'Red Heart', pct: 8.1, vol: 'Sincere Support' },
+        { glyph: '🫠', label: 'Melting Face', pct: 5.2, vol: 'Existential Dread' },
+        { glyph: '💅', label: 'Nail Polish', pct: 4.8, vol: 'Sassy Truth' },
+        { glyph: '🧢', label: 'Cap (Lie Callout)', pct: 3.9, vol: 'Truth Defense' },
+        { glyph: '😂', label: 'Tears of Joy', pct: 2.4, vol: 'Flagged Cheugy' },
+        { glyph: '👍', label: 'Thumbs Up', pct: 1.1, vol: 'Severe Cringe' }
+      ],
+      workplace: [
+        { glyph: '👍', label: 'Thumbs Up', pct: 14.5, vol: 'Default OK' },
+        { glyph: '🤝', label: 'Handshake', pct: 8.2, vol: 'Agreement' },
+        { glyph: '❤️', label: 'Heart', pct: 7.2, vol: 'Warm Thanks' },
+        { glyph: '🙏', label: 'Folded Hands', pct: 6.9, vol: 'Appreciation' },
+        { glyph: '😂', label: 'Tears of Joy', pct: 5.8, vol: 'Safe Humor' },
+        { glyph: '🎉', label: 'Party Popper', pct: 4.5, vol: 'Milestones' },
+        { glyph: '🚀', label: 'Rocket Ship', pct: 3.8, vol: 'Product Launches' },
+        { glyph: '💀', label: 'Skull', pct: 0.8, vol: 'Confusing to Boss' }
+      ]
+    };
+
+    function renderBarChart(categoryKey) {
+      const container = document.getElementById('bar-chart-stage');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let data;
+      // Use Python logic behind-the-scenes if Brython engine is ready, with robust JS fallback
+      if (window.PythonBridge && window.PythonBridge.getStats) {
+        try {
+          const pyStats = window.PythonBridge.getStats(categoryKey);
+          if (pyStats && pyStats.length) {
+            data = pyStats.map(s => ({ glyph: s.glyph, label: s.name, pct: s[categoryKey] || s.global }));
+          }
+        } catch (e) {}
+      }
+      if (!data) {
+        data = analyticsDataSets[categoryKey] || analyticsDataSets.global;
+      }
+
+      data.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML = `
+          <div class="bar-emoji">${item.glyph}</div>
+          <div class="bar-label" title="${item.label}">${item.label}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 0%;" data-pct="${item.pct}"></div>
+          </div>
+          <div class="bar-val">${item.pct}%</div>
+        `;
+        container.appendChild(row);
+      });
+
+      // Animate bar fills cleanly
+      setTimeout(() => {
+        document.querySelectorAll('.bar-fill').forEach(fill => {
+          const target = fill.getAttribute('data-pct');
+          fill.style.width = `${Math.min(100, target * 6.5)}%`;
+        });
+      }, 50);
+    }
+
+    function switchChartCategory(catKey, btnEl) {
+      playSynthesizedSound('click');
+      document.querySelectorAll('.chart-tab-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+      renderBarChart(catKey);
+    }
+
+    /* ==========================================================================
+       G. SLIDE 5: EMOJI WORDLE (TEXT CLUES INSTEAD OF PICTURES)
+       ========================================================================== */
+    const wordlePuzzles = [
+      { word: 'SKULL', hint: 'The morbid bone glyph that Gen Z uses to signify extreme laughter (💀).' },
+      { word: 'CLOWN', hint: 'What you are when you get played or act foolishly in social situations (🤡).' },
+      { word: 'CHEUG', hint: 'Slang for something outdated, millennial-coded, or trying too hard.' },
+      { word: 'IRONY', hint: 'The rhetorical layer that flips literal emojis into subversive comedy.' },
+      { word: 'SLANG', hint: 'Informal generational vernacular acting as digital cryptography.' },
+      { word: 'LAUGH', hint: 'The physical reaction that 😂 once represented before it decayed.' }
+    ];
+
+    let currentWordleIndex = 0;
+    let targetWord = 'SKULL';
+    let wordleRow = 0;
+    let wordleCol = 0;
+    let wordleGridData = Array(6).fill('').map(() => Array(5).fill(''));
+    let wordleGameOver = false;
+
+    function initWordle() {
+      const puzzle = wordlePuzzles[currentWordleIndex];
+      targetWord = puzzle.word;
+      document.getElementById('wordle-hint-text').innerHTML = `💡 <strong>Text Clue:</strong> ${puzzle.hint}`;
+      document.getElementById('wordle-message').textContent = '';
+      document.getElementById('wordle-message').style.color = 'var(--text-light)';
+
+      wordleRow = 0;
+      wordleCol = 0;
+      wordleGameOver = false;
+      wordleGridData = Array(6).fill('').map(() => Array(5).fill(''));
+
+      // Build 6x5 grid
+      const grid = document.getElementById('wordle-grid');
+      grid.innerHTML = '';
+      for (let r = 0; r < 6; r++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'wordle-row';
+        rowDiv.id = `wordle-row-${r}`;
+        for (let c = 0; c < 5; c++) {
+          const tile = document.createElement('div');
+          tile.className = 'wordle-tile';
+          tile.id = `tile-${r}-${c}`;
+          rowDiv.appendChild(tile);
+        }
+        grid.appendChild(rowDiv);
+      }
+
+      // Build Virtual Keyboard
+      const kbContainer = document.getElementById('wordle-keyboard');
+      kbContainer.innerHTML = '';
+      const kbRows = [
+        ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+        ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+        ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫']
+      ];
+
+      kbRows.forEach(rowKeys => {
+        const row = document.createElement('div');
+        row.className = 'keyboard-row';
+        rowKeys.forEach(k => {
+          const btn = document.createElement('button');
+          btn.className = `key-btn ${k === 'ENTER' || k === '⌫' ? 'wide' : ''}`;
+          btn.textContent = k;
+          btn.id = `key-${k}`;
+          btn.onclick = () => handleWordleKey(k);
+          row.appendChild(btn);
+        });
+        kbContainer.appendChild(row);
+      });
+    }
+
+    function handleWordleKey(key) {
+      if (wordleGameOver) return;
+
+      if (key === '⌫') {
+        if (wordleCol > 0) {
+          playSynthesizedSound('click');
+          wordleCol--;
+          wordleGridData[wordleRow][wordleCol] = '';
+          const tile = document.getElementById(`tile-${wordleRow}-${wordleCol}`);
+          tile.textContent = '';
+          tile.classList.remove('pop');
+        }
+      } else if (key === 'ENTER') {
+        if (wordleCol === 5) {
+          submitWordleGuess();
+        } else {
+          playSynthesizedSound('wrong');
+          showMessageWordle('Need 5 letters to submit!', '#ef4444');
+        }
+      } else if (/^[A-Z]$/.test(key)) {
+        if (wordleCol < 5) {
+          playSynthesizedSound('click');
+          wordleGridData[wordleRow][wordleCol] = key;
+          const tile = document.getElementById(`tile-${wordleRow}-${wordleCol}`);
+          tile.textContent = key;
+          tile.classList.add('pop');
+          wordleCol++;
+        }
+      }
+    }
+
+    function submitWordleGuess() {
+      const guess = wordleGridData[wordleRow].join('');
+      const targetLetters = targetWord.split('');
+      const guessLetters = guess.split('');
+      const statusArr = Array(5).fill('absent');
+
+      // First pass: exact matches
+      guessLetters.forEach((letter, i) => {
+        if (letter === targetLetters[i]) {
+          statusArr[i] = 'correct';
+          targetLetters[i] = null;
+        }
+      });
+
+      // Second pass: present matches
+      guessLetters.forEach((letter, i) => {
+        if (statusArr[i] !== 'correct' && targetLetters.includes(letter)) {
+          statusArr[i] = 'present';
+          targetLetters[targetLetters.indexOf(letter)] = null;
+        }
+      });
+
+      // Staggered tile flip
+      statusArr.forEach((status, i) => {
+        setTimeout(() => {
+          const tile = document.getElementById(`tile-${wordleRow}-${i}`);
+          tile.classList.add(status);
+
+          const keyBtn = document.getElementById(`key-${guessLetters[i]}`);
+          if (keyBtn) {
+            if (status === 'correct') {
+              keyBtn.className = 'key-btn correct';
+            } else if (status === 'present' && !keyBtn.classList.contains('correct')) {
+              keyBtn.className = 'key-btn present';
+            } else if (!keyBtn.classList.contains('correct') && !keyBtn.classList.contains('present')) {
+              keyBtn.className = 'key-btn absent';
+            }
+          }
+        }, i * 140);
+      });
+
+      setTimeout(() => {
+        if (guess === targetWord) {
+          wordleGameOver = true;
+          playSynthesizedSound('success');
+          showMessageWordle(`FLUENCY CONFIRMED! Word was ${targetWord}! 🏆`, '#10b981');
+        } else if (wordleRow === 5) {
+          wordleGameOver = true;
+          playSynthesizedSound('wrong');
+          showMessageWordle(`GAME OVER! Word was ${targetWord} 💀`, '#ef4444');
+        } else {
+          wordleRow++;
+          wordleCol = 0;
+        }
+      }, 5 * 140 + 180);
+    }
+
+    function showMessageWordle(msg, color) {
+      const el = document.getElementById('wordle-message');
+      el.textContent = msg;
+      el.style.color = color;
+    }
+
+    function resetWordleGame() {
+      currentWordleIndex = (currentWordleIndex + 1) % wordlePuzzles.length;
+      playSynthesizedSound('click');
+      initWordle();
+    }
+
+    /* ==========================================================================
+       H. SLIDE 6: GUESS THE COUNTRY BY EMOJI
+       ========================================================================== */
+    const countryPuzzles = [
+      { name: "France", emojis: "🗼 🥖 🍷", continent: "Europe", capital: "Paris" },
+      { name: "Japan", emojis: "🍣 🗻 🗾", continent: "Asia", capital: "Tokyo" },
+      { name: "Italy", emojis: "🍕 🏛️ 🛵", continent: "Europe", capital: "Rome" },
+      { name: "Australia", emojis: "🦘 🐨 🏉", continent: "Oceania", capital: "Canberra" },
+      { name: "Mexico", emojis: "🌮 🎺 🌵", continent: "North America", capital: "Mexico City" },
+      { name: "Canada", emojis: "🍁 🏒 🥞", continent: "North America", capital: "Ottawa" },
+      { name: "Brazil", emojis: "☕ ⚽ 💃", continent: "South America", capital: "Brasília" },
+      { name: "Germany", emojis: "🥨 🍺 🏰", continent: "Europe", capital: "Berlin" },
+      { name: "United States", emojis: "🗽 🍔 🏈", continent: "North America", capital: "Washington, D.C." },
+      { name: "United Kingdom", emojis: "🫖 🌧️ 👑", continent: "Europe", capital: "London" },
+      { name: "India", emojis: "🍛 🐅 🛕", continent: "Asia", capital: "New Delhi" },
+      { name: "Egypt", emojis: "🏜️ 🐪 🏛️", continent: "Africa", capital: "Cairo" }
+    ];
+
+    let currentCountryPuzzle = null;
+    let countrySolvedCount = 0;
+    let countryStreak = 0;
+
+    function generateNewCountryPuzzle() {
+      playSynthesizedSound('click');
+
+      // Use Python logic behind-the-scenes if Brython engine is ready, with robust JS fallback
+      let puzzle;
+      if (window.PythonBridge && window.PythonBridge.getCountry) {
+        try {
+          puzzle = window.PythonBridge.getCountry();
+        } catch (e) {}
+      }
+      if (!puzzle) {
+        const filtered = countryPuzzles.filter(c => !currentCountryPuzzle || c.name !== currentCountryPuzzle.name);
+        puzzle = filtered[Math.floor(Math.random() * filtered.length)];
+      }
+      currentCountryPuzzle = puzzle;
+
+      document.getElementById('country-emoji-container').textContent = currentCountryPuzzle.emojis;
+      document.getElementById('country-guess-input').value = '';
+      document.getElementById('country-feedback').textContent = '';
+      document.getElementById('country-hint-box').style.display = 'none';
+      document.getElementById('country-guess-input').focus();
+    }
+
+    function handleCountryKeyDown(e) {
+      if (e.key === 'Enter') submitCountryGuess();
+    }
+
+    function submitCountryGuess() {
+      const input = document.getElementById('country-guess-input');
+      const guess = input.value.trim().toLowerCase();
+      const feedback = document.getElementById('country-feedback');
+      if (!guess) return;
+
+      const target = currentCountryPuzzle.name.toLowerCase();
+      const aliases = {
+        "united states": ["usa", "us", "america", "united states of america"],
+        "united kingdom": ["uk", "britain", "england", "great britain"]
+      };
+
+      const isMatch = (guess === target) || (aliases[target] && aliases[target].includes(guess));
+
+      if (isMatch) {
+        playSynthesizedSound('success');
+        countrySolvedCount++;
+        countryStreak++;
+        feedback.innerHTML = `<span style="color:#10b981;">✓ CORRECT! It is ${currentCountryPuzzle.name}! 🏆</span>`;
+        document.getElementById('country-solved-count').textContent = countrySolvedCount;
+        document.getElementById('country-streak-count').textContent = `🔥 x${countryStreak}`;
+
+        setTimeout(() => {
+          generateNewCountryPuzzle();
+        }, 1400);
+      } else {
+        playSynthesizedSound('wrong');
+        countryStreak = 0;
+        document.getElementById('country-streak-count').textContent = `🔥 x0`;
+        feedback.innerHTML = `<span style="color:#ef4444;">✗ Not quite right. Try again or ask for a hint!</span>`;
+      }
+    }
+
+    function revealCountryHint() {
+      if (!currentCountryPuzzle) return;
+      playSynthesizedSound('chime');
+      const hintBox = document.getElementById('country-hint-box');
+      hintBox.style.display = 'block';
+      hintBox.innerHTML = `💡 <strong>Hint:</strong> Located in <em>${currentCountryPuzzle.continent}</em>, capital city is <strong>${currentCountryPuzzle.capital}</strong>.`;
+    }
+
+    /* ==========================================================================
+       I. SLIDE 7: EMOJI AVATAR BUILDER
+       ========================================================================== */
+    const avatarAssets = {
+      bases: ['😀', '😎', '😉', '😆', '😐', '🤯', '💀', '👽', '🐱'],
+      hats: ['', '🥳', '🎩', '👑', '🤠', '🧢', '🎓', '🎧'],
+      glasses: ['', '🕶️', '👓', '🧐', '🥽', '⭐'],
+      accessories: ['', '✨', '🔥', '❤️', '💧', '🥸']
+    };
+
+    let avatarState = {
+      base: '😀',
+      hat: '',
+      glasses: '',
+      accessory: ''
+    };
+
+    function initAvatarBuilder() {
+      // Build options grid for each category
+      const renderOptions = (catKey, containerId) => {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        avatarAssets[catKey].forEach(item => {
+          const btn = document.createElement('button');
+          btn.className = `avatar-option-btn ${avatarState[catKey.slice(0, -1)] === item ? 'active' : ''}`;
+          btn.textContent = item === '' ? '🚫' : item;
+          btn.onclick = () => {
+            playSynthesizedSound('click');
+            avatarState[catKey.slice(0, -1)] = item;
+            updateAvatarPreview();
+            container.querySelectorAll('.avatar-option-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          };
+          container.appendChild(btn);
+        });
+      };
+
+      renderOptions('bases', 'avatar-base-options');
+      renderOptions('hats', 'avatar-hat-options');
+      renderOptions('glasses', 'avatar-glasses-options');
+      renderOptions('accessories', 'avatar-accessory-options');
+      updateAvatarPreview();
+    }
+
+    function updateAvatarPreview() {
+      document.getElementById('avatar-layer-base').textContent = avatarState.base;
+      document.getElementById('avatar-layer-hat').textContent = avatarState.hat;
+      document.getElementById('avatar-layer-glasses').textContent = avatarState.glasses;
+      document.getElementById('avatar-layer-accessory').textContent = avatarState.accessory;
+
+      const titles = [
+        "The Neon Maverick", "The Cyber Scholar", "The Post-Ironic Monarch",
+        "The Chill Absurdist", "The Digital Diplomat", "The High-Tech Vibe Master"
+      ];
+      document.getElementById('avatar-title-label').textContent = `"${titles[Math.floor(Math.random() * titles.length)]}"`;
+    }
+
+    function randomizeAvatar() {
+      playSynthesizedSound('chime');
+      avatarState.base = avatarAssets.bases[Math.floor(Math.random() * avatarAssets.bases.length)];
+      avatarState.hat = avatarAssets.hats[Math.floor(Math.random() * avatarAssets.hats.length)];
+      avatarState.glasses = avatarAssets.glasses[Math.floor(Math.random() * avatarAssets.glasses.length)];
+      avatarState.accessory = avatarAssets.accessories[Math.floor(Math.random() * avatarAssets.accessories.length)];
+      updateAvatarPreview();
+      initAvatarBuilder(); // Refresh active button states
+    }
+
+    function copyAvatarCode() {
+      playSynthesizedSound('click');
+      const combo = `${avatarState.hat} ${avatarState.glasses} ${avatarState.base} ${avatarState.accessory}`.trim();
+      navigator.clipboard.writeText(combo).then(() => {
+        alert(`Avatar Glyphs Copied to Clipboard:\n\n${combo}`);
+      }).catch(() => {
+        alert(`Your Avatar: ${combo}`);
+      });
+    }
+
+    /* ==========================================================================
+       J. SLIDE 8: TRIVIA CHALLENGE
+       ========================================================================== */
+    const triviaQuestions = [
+      {
+        question: "1. A Gen Z colleague texts: 'Bro tripped in the canteen and I literally died 💀'. What is their emotional state?",
+        options: [
+          { text: "They are panicked and requesting urgent medical assistance.", correct: false },
+          { text: "They are laughing uncontrollably at the absurd spectacle.", correct: true },
+          { text: "They are deeply offended and filing an HR incident report.", correct: false },
+          { text: "They are using a fantasy spell from an online game.", correct: false }
+        ],
+        explanation: "💀 ('I'm dead') is the supreme Gen Z token for extreme laughter, derived from the idiom 'dying of laughter'."
+      },
+      {
+        question: "2. In a 2023 Canadian legal trial, what did the court rule regarding a farmer texting 👍 in a business grain deal?",
+        options: [
+          { text: "It was informal small-talk and had zero binding legal weight.", correct: false },
+          { text: "It constituted a legally binding contract signature ($82,000 CAD).", correct: true },
+          { text: "It was interpreted as workplace harassment.", correct: false },
+          { text: "It meant the contract was postponed indefinitely.", correct: false }
+        ],
+        explanation: "The Saskatchewan Court of King's Bench ruled that 👍 constitutes valid acceptance, awarding $82k CAD in damages for breach."
+      },
+      {
+        question: "3. Why do younger cohorts find 😂 ('Tears of Joy') cringeworthy and 'cheugy'?",
+        options: [
+          { text: "It takes up too much data on mobile cellular networks.", correct: false },
+          { text: "Its excessive mainstream use by older generations robbed it of cool insider currency.", correct: true },
+          { text: "It is banned by the official Unicode Consortium.", correct: false },
+          { text: "It can only be legally sent for tragic news.", correct: false }
+        ],
+        explanation: "Semiotic inflation rule: Once parents, brand commercials, and banks overuse a glyph, youth cohorts systematically abandon it."
+      },
+      {
+        question: "4. If a group chat reply says: 'Yeah, I totally believe you studied all night 🧢', what is the sender saying?",
+        options: [
+          { text: "They think you should wear a warm baseball cap.", correct: false },
+          { text: "They think you are blatantly lying and exaggerating ('Cap' = Lie).", correct: true },
+          { text: "They are offering to purchase you new sports headwear.", correct: false },
+          { text: "It indicates freezing cold air conditioning.", correct: false }
+        ],
+        explanation: "'Cap' = Lie / Falsehood (from AAVE). Calling someone out with 🧢 means you know they are fabricating."
+      },
+      {
+        question: "5. Your manager messages: 'Can you please finish this report by 5 PM? 🙂'. How does Gen Z interpret this?",
+        options: [
+          { text: "A kind, warm, and gentle supportive reminder.", correct: false },
+          { text: "Masked passive-aggressive fury: 'I will destroy you if this is late'.", correct: true },
+          { text: "A sign of deep personal romance.", correct: false },
+          { text: "An accidental keystroke typo.", correct: false }
+        ],
+        explanation: "🙂 ('Slightly Smiling') is frequently read by younger cohorts as a mask of deadpan menace concealing suppressed hostility."
+      },
+      {
+        question: "6. What does posting 💅 ('Nail Polish') at the end of a comment signify in internet culture?",
+        options: [
+          { text: "The user is currently receiving a beauty treatment.", correct: false },
+          { text: "A sassy, confident 'mic drop' indicating unbothered superiority.", correct: true },
+          { text: "The user is requesting nail care recommendations.", correct: false },
+          { text: "An apology for an offensive statement.", correct: false }
+        ],
+        explanation: "Born in ball culture, 💅 represents unshakeable, unbothered confidence after dropping an undeniable truth."
+      }
+    ];
+
+    let triviaCurrentIdx = 0;
+    let triviaScore = 0;
+    let triviaStreak = 0;
+    let triviaAnswered = false;
+
+    function initTriviaGame() {
+      triviaCurrentIdx = 0;
+      triviaScore = 0;
+      triviaStreak = 0;
+      loadTriviaQuestion();
+    }
+
+    function loadTriviaQuestion() {
+      triviaAnswered = false;
+      const qData = triviaQuestions[triviaCurrentIdx];
+
+      document.getElementById('trivia-q-counter').textContent = `QUESTION ${triviaCurrentIdx + 1} OF ${triviaQuestions.length}`;
+      document.getElementById('trivia-score-badge').textContent = `SCORE: ${triviaScore} PTS`;
+      document.getElementById('trivia-streak-badge').textContent = `🔥 STREAK: x${triviaStreak}`;
+      document.getElementById('trivia-question').textContent = qData.question;
+
+      const feedback = document.getElementById('trivia-feedback');
+      feedback.className = 'trivia-feedback-panel';
+      feedback.textContent = '';
+
+      document.getElementById('trivia-next-btn').style.display = 'none';
+
+      const optContainer = document.getElementById('trivia-options');
+      optContainer.innerHTML = '';
+
+      qData.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = 'trivia-answer-btn';
+        btn.textContent = opt.text;
+        btn.onclick = () => selectTriviaOption(btn, opt, qData);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function selectTriviaOption(btnEl, option, qData) {
+      if (triviaAnswered) return;
+      triviaAnswered = true;
+
+      const feedback = document.getElementById('trivia-feedback');
+      feedback.classList.add('active');
+
+      if (option.correct) {
+        playSynthesizedSound('success');
+        btnEl.classList.add('correct-glow');
+        triviaScore += 100 + (triviaStreak * 25);
+        triviaStreak++;
+        feedback.className = 'trivia-feedback-panel active success';
+        feedback.innerHTML = `✓ <strong>CORRECT!</strong> ${qData.explanation}`;
+      } else {
+        playSynthesizedSound('wrong');
+        btnEl.classList.add('wrong-glow');
+        triviaStreak = 0;
+        feedback.className = 'trivia-feedback-panel active failure';
+        feedback.innerHTML = `✗ <strong>INCORRECT!</strong> ${qData.explanation}`;
+
+        document.querySelectorAll('.trivia-answer-btn').forEach(b => {
+          const matchingOpt = qData.options.find(o => o.text === b.textContent);
+          if (matchingOpt && matchingOpt.correct) b.classList.add('correct-glow');
+        });
+      }
+
+      document.getElementById('trivia-score-badge').textContent = `SCORE: ${triviaScore} PTS`;
+      document.getElementById('trivia-streak-badge').textContent = `🔥 STREAK: x${triviaStreak}`;
+
+      const nextBtn = document.getElementById('trivia-next-btn');
+      nextBtn.style.display = 'block';
+      nextBtn.textContent = (triviaCurrentIdx === triviaQuestions.length - 1) ? 'View Final Results ➔' : 'Next Question ➔';
+    }
+
+    function nextTriviaQuestion() {
+      playSynthesizedSound('click');
+      if (triviaCurrentIdx < triviaQuestions.length - 1) {
+        triviaCurrentIdx++;
+        loadTriviaQuestion();
+      } else {
+        playSynthesizedSound('chime');
+        let rankTitle = "Emoji Master: Completely Fluent Across Gen Z, Millennial & Boomer!";
+        if (triviaScore < 300) rankTitle = "Boomer Alert: Please consult a generational translator before texting!";
+        else if (triviaScore < 500) rankTitle = "Bilingual Texter: Moderate cultural friction in corporate chat.";
+
+        document.getElementById('trivia-question').textContent = `QUIZ COMPLETE! You scored ${triviaScore} points!`;
+        document.getElementById('trivia-options').innerHTML = `
+          <div style="grid-column: span 2; text-align:center; padding:24px; background:rgba(0,0,0,0.3); border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:38px; margin-bottom:8px;">🎖️</div>
+            <div style="font-size:16px; font-weight:800; color:#38bdf8; margin-bottom:6px;">${rankTitle}</div>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">
+              You navigated the treacherous waters of generational semiotics and tone inversion.
+            </p>
+            <button class="nav-btn primary" onclick="initTriviaGame()" style="margin:0 auto;">Restart Quiz 🔄</button>
+          </div>
+        `;
+        document.getElementById('trivia-feedback').style.display = 'none';
+        document.getElementById('trivia-next-btn').style.display = 'none';
+      }
+    }
+
+    /* ==========================================================================
+       K. SLIDE 9: HISTORICAL EVOLUTION (DOCOMO TO UNICODE)
+       ========================================================================== */
+    function highlightHistory(index) {
+      playSynthesizedSound('click');
+      document.querySelectorAll('.history-card').forEach((c, i) => c.classList.toggle('active', i === index));
+    }
+
+    let is12pxView = false;
+    function toggleDoCoMoDemo() {
+      playSynthesizedSound('click');
+      is12pxView = !is12pxView;
+      const btn = document.getElementById('docomo-toggle-btn');
+      btn.textContent = is12pxView ? "Reset Vector View" : "Toggle 12px Pixel View";
+      document.querySelectorAll('.history-pin').forEach(pin => {
+        pin.style.filter = is12pxView ? "contrast(200%) grayscale(100%)" : "none";
+        pin.style.imageRendering = is12pxView ? "pixelated" : "auto";
+      });
+    }
+
+    /* ==========================================================================
+       L. SLIDE 10: "CATCH THE EMOJI" ARCADE MINI-GAME
+       ========================================================================== */
+    let arcadeRunning = false;
+    let arcadeScore = 0;
+    let arcadeCombo = 1;
+    let arcadeLives = 3;
+    let arcadeTimeLeft = 30;
+    let arcadeTimerInterval = null;
+    let arcadeSpawnInterval = null;
+    let arcadeAnimFrame = null;
+    let arcadeHighScore = 0;
+    let activeFallingItems = [];
+
+    const arcadeItemTypes = [
+      { glyph: '💖', pts: 30, speed: 3.2, isBomb: false },
+      { glyph: '⭐', pts: 20, speed: 2.8, isBomb: false },
+      { glyph: '💀', pts: 15, speed: 2.5, isBomb: false },
+      { glyph: '😂', pts: 10, speed: 2.2, isBomb: false },
+      { glyph: '🔥', pts: 25, speed: 3.0, isBomb: false },
+      { glyph: '💣', pts: -50, speed: 2.4, isBomb: true }
+    ];
+
+    function startArcadeGame() {
+      playSynthesizedSound('click');
+      const stage = document.getElementById('arcade-stage');
+      document.getElementById('arcade-overlay').style.display = 'none';
+
+      // Reset state
+      arcadeRunning = true;
+      arcadeScore = 0;
+      arcadeCombo = 1;
+      arcadeLives = 3;
+      arcadeTimeLeft = 30;
+      activeFallingItems.forEach(item => item.el.remove());
+      activeFallingItems = [];
+
+      updateArcadeHUD();
+
+      // Countdown Timer
+      clearInterval(arcadeTimerInterval);
+      arcadeTimerInterval = setInterval(() => {
+        if (!arcadeRunning) return;
+        arcadeTimeLeft--;
+        document.getElementById('arcade-timer').textContent = `${arcadeTimeLeft}s`;
+        if (arcadeTimeLeft <= 0) {
+          endArcadeGame("TIME'S UP!");
+        }
+      }, 1000);
+
+      // Spawner
+      clearInterval(arcadeSpawnInterval);
+      arcadeSpawnInterval = setInterval(() => {
+        if (!arcadeRunning) return;
+        spawnFallingItem();
+      }, 650);
+
+      // Animation Loop
+      cancelAnimationFrame(arcadeAnimFrame);
+      function arcadeLoop() {
+        if (!arcadeRunning) return;
+        updateFallingItems();
+        arcadeAnimFrame = requestAnimationFrame(arcadeLoop);
+      }
+      arcadeAnimFrame = requestAnimationFrame(arcadeLoop);
+    }
+
+    function spawnFallingItem() {
+      const stage = document.getElementById('arcade-stage');
+      const stageWidth = stage.clientWidth;
+      
+      // Bomb probability scales with score
+      const bombChance = Math.min(0.35, 0.15 + (arcadeScore / 1000));
+      let typeData;
+      if (Math.random() < bombChance) {
+        typeData = arcadeItemTypes.find(t => t.isBomb);
+      } else {
+        const positiveItems = arcadeItemTypes.filter(t => !t.isBomb);
+        typeData = positiveItems[Math.floor(Math.random() * positiveItems.length)];
+      }
+
+      const el = document.createElement('div');
+      el.className = 'falling-emoji-item';
+      el.textContent = typeData.glyph;
+      const startX = Math.random() * (stageWidth - 60) + 10;
+      el.style.left = `${startX}px`;
+      el.style.top = `-50px`;
+
+      const itemObj = {
+        el: el,
+        type: typeData,
+        x: startX,
+        y: -50,
+        speed: typeData.speed * (1 + Math.random() * 0.4)
+      };
+
+      el.onclick = (e) => catchItem(itemObj, e);
+      stage.appendChild(el);
+      activeFallingItems.push(itemObj);
+    }
+
+    function catchItem(itemObj, e) {
+      if (!arcadeRunning) return;
+
+      const stage = document.getElementById('arcade-stage');
+      const rect = stage.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      if (itemObj.type.isBomb) {
+        // Bomb Hit Penalty
+        playSynthesizedSound('bomb');
+        arcadeScore = Math.max(0, arcadeScore - 50);
+        arcadeCombo = 1;
+        arcadeLives--;
+        createScoreTag(clickX, clickY, '-50 💣', true);
+
+        // Shake stage
+        stage.style.transform = 'translate(4px, 4px)';
+        setTimeout(() => stage.style.transform = 'none', 120);
+
+        if (arcadeLives <= 0) {
+          endArcadeGame("ALL LIVES LOST!");
+        }
+      } else {
+        // Positive Catch
+        playSynthesizedSound('catch');
+        const pointsAwarded = itemObj.type.pts * arcadeCombo;
+        arcadeScore += pointsAwarded;
+        arcadeCombo = Math.min(5, arcadeCombo + 1);
+        createScoreTag(clickX, clickY, `+${pointsAwarded}!`);
+      }
+
+      // Remove element
+      itemObj.el.remove();
+      activeFallingItems = activeFallingItems.filter(i => i !== itemObj);
+      updateArcadeHUD();
+    }
+
+    function createScoreTag(x, y, text, isPenalty = false) {
+      const stage = document.getElementById('arcade-stage');
+      const tag = document.createElement('div');
+      tag.className = `floating-score-tag ${isPenalty ? 'penalty' : ''}`;
+      tag.textContent = text;
+      tag.style.left = `${x}px`;
+      tag.style.top = `${y}px`;
+      stage.appendChild(tag);
+      setTimeout(() => tag.remove(), 800);
+    }
+
+    function updateFallingItems() {
+      const stage = document.getElementById('arcade-stage');
+      const stageHeight = stage.clientHeight;
+
+      for (let i = activeFallingItems.length - 1; i >= 0; i--) {
+        const item = activeFallingItems[i];
+        item.y += item.speed;
+        item.el.style.top = `${item.y}px`;
+
+        // If bottom reached
+        if (item.y > stageHeight) {
+          item.el.remove();
+          activeFallingItems.splice(i, 1);
+          // Dropped non-bomb resets combo
+          if (!item.type.isBomb && arcadeCombo > 1) {
+            arcadeCombo = 1;
+            document.getElementById('arcade-combo').textContent = `x1`;
+          }
+        }
+      }
+    }
+
+    function updateArcadeHUD() {
+      document.getElementById('arcade-score').textContent = arcadeScore;
+      document.getElementById('arcade-combo').textContent = `x${arcadeCombo}`;
+      let hearts = '';
+      for (let i = 0; i < arcadeLives; i++) hearts += '❤️';
+      document.getElementById('arcade-lives').textContent = hearts || '💀';
+    }
+
+    function endArcadeGame(reasonText) {
+      arcadeRunning = false;
+      clearInterval(arcadeTimerInterval);
+      clearInterval(arcadeSpawnInterval);
+      cancelAnimationFrame(arcadeAnimFrame);
+      playSynthesizedSound('chime');
+
+      if (arcadeScore > arcadeHighScore) {
+        arcadeHighScore = arcadeScore;
+        document.getElementById('arcade-high-score').textContent = arcadeHighScore;
+      }
+
+      const overlay = document.getElementById('arcade-overlay');
+      overlay.style.display = 'flex';
+      document.getElementById('arcade-overlay-title').textContent = reasonText;
+      overlay.querySelector('p').innerHTML = `
+        Final Score: <strong>${arcadeScore} PTS</strong><br>
+        Highest Combo Achieved: <strong>x${arcadeCombo}</strong>
+      `;
+      overlay.querySelector('button').textContent = "Play Again 🔄";
+    }
+
+    /* ==========================================================================
+       M. SLIDE 11: CLOSING / THANK YOU (FLOATING EMOJIS & GLOWING HEARTS)
+       ========================================================================== */
+    function initThankYouFloatingElements() {
+      const stage = document.getElementById('thankyou-stage');
+      const existing = stage.querySelectorAll('.floating-bg-item');
+      if (existing.length > 0) return;
+
+      const floatingGlyphs = ['💖', '❤️', '✨', '🙏', '💜', '🌟', '🚀', '🎭', '💫', '💙'];
+
+      for (let i = 0; i < 14; i++) {
+        const span = document.createElement('span');
+        span.className = 'floating-bg-item';
+        span.textContent = floatingGlyphs[i % floatingGlyphs.length];
+        span.style.left = `${Math.random() * 88 + 4}%`;
+        span.style.top = `${Math.random() * 80 + 10}%`;
+        span.style.animationDelay = `${(Math.random() * 4).toFixed(1)}s`;
+        span.style.animationDuration = `${(Math.random() * 3 + 4).toFixed(1)}s`;
+        span.style.fontSize = `${Math.floor(Math.random() * 24 + 32)}px`;
+        stage.appendChild(span);
+      }
+    }
+
+    /* ==========================================================================
+       N. DOM CONTENT LOADED BOOTSTRAP
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      initThreeBackground();
+      initHeroThreeScene();
+      renderDictionaryCards(dictionaryDatabase);
+      initMemoryGame();
+      renderBarChart('global');
+      initWordle();
+      generateNewCountryPuzzle();
+      initAvatarBuilder();
+      initTriviaGame();
+      updateSlideUI();
+    });
+  </script>
+</body>
+</html>
