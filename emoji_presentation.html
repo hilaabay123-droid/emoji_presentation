@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>The Secret Language of Emojis: Generational Semiotics & Interactive Arcade</title>
+  <title>Version 3 — The Secret Language of Emojis: Generational Semiotics & Interactive Arcade</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans for UI & JetBrains Mono for Code/Stats -->
+  <!-- Version 3 typography from emoji_presentation_design_guide.md -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Unkempt:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Three.js (r128) from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -22,36 +22,36 @@
        1. FUTURISTIC DESIGN SYSTEM VARIABLES & RESET
        ========================================================================== */
     :root {
-      --bg-dark: #07090e;
+      --bg-dark: #121214;
       --bg-card: rgba(18, 22, 34, 0.74);
       --bg-card-hover: rgba(28, 34, 54, 0.9);
       --card-border: rgba(255, 255, 255, 0.09);
-      --card-border-glow: rgba(99, 102, 241, 0.45);
+      --card-border-glow: rgba(0, 240, 255, 0.45);
 
       /* Generation Accent Colors */
-      --boomer-blue: #38bdf8;
-      --genx-amber: #f59e0b;
-      --millennial-pink: #ec4899;
-      --genz-neon: #10b981;
-      --genz-purple: #8b5cf6;
-      --danger-red: #ef4444;
+      --boomer-blue: #00F0FF;
+      --genx-amber: #FFE600;
+      --millennial-pink: #FF007A;
+      --genz-neon: #39FF14;
+      --genz-purple: #FF007A;
+      --danger-red: #FF007A;
 
       /* High-End Futuristic Gradients */
-      --grad-cyan-indigo: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
-      --grad-purple-pink: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-      --grad-emerald-cyan: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
-      --grad-gold-rose: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+      --grad-cyan-indigo: linear-gradient(135deg, #00F0FF 0%, #00F0FF 100%);
+      --grad-purple-pink: linear-gradient(135deg, #FF007A 0%, #FF007A 100%);
+      --grad-emerald-cyan: linear-gradient(135deg, #39FF14 0%, #00F0FF 100%);
+      --grad-gold-rose: linear-gradient(135deg, #FFE600 0%, #FF007A 100%);
       --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
 
       /* Typography & Shadows */
-      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-      --text-white: #f8fafc;
-      --text-light: #e2e8f0;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
+      --font-main: 'Space Grotesk', sans-serif;
+      --font-mono: 'Space Grotesk', sans-serif;
+      --text-white: #FAFAFA;
+      --text-light: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --text-dim: #A1A1AA;
       --shadow-ambient: 0 25px 60px -15px rgba(0, 0, 0, 0.85);
-      --shadow-neon: 0 0 25px rgba(99, 102, 241, 0.35);
+      --shadow-neon: 0 0 25px rgba(0, 240, 255, 0.35);
 
       /* Animation Curves */
       --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
@@ -82,9 +82,9 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      background: radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.16) 0%, transparent 42%),
-                  radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.14) 0%, transparent 45%),
-                  radial-gradient(circle at 50% 50%, #080b12 0%, #030407 100%);
+      background: radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.16) 0%, transparent 42%),
+                  radial-gradient(circle at 85% 80%, rgba(255, 0, 122, 0.14) 0%, transparent 45%),
+                  radial-gradient(circle at 50% 50%, #121214 0%, #121214 100%);
     }
 
     body::before {
@@ -146,7 +146,7 @@
       width: 9%;
       background: var(--grad-cyan-indigo);
       transition: width 0.5s var(--ease-snappy);
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.85);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.85);
     }
 
     /* Header Nav Bar */
@@ -183,7 +183,7 @@
 
     @keyframes gentle-pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); filter: drop-shadow(0 0 8px #6366f1); }
+      50% { transform: scale(1.08); filter: drop-shadow(0 0 8px #00F0FF); }
     }
 
     .brand-title {
@@ -224,7 +224,7 @@
     }
 
     .slide-badge-counter span.highlight {
-      color: #38bdf8;
+      color: #00F0FF;
       font-weight: 700;
     }
 
@@ -315,7 +315,7 @@
       margin-bottom: 8px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.04);
-      color: #38bdf8;
+      color: #00F0FF;
     }
 
     .slide-title {
@@ -419,7 +419,7 @@
     .hero-3d-wrapper {
       position: relative;
       height: 390px;
-      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.16) 0%, transparent 70%);
+      background: radial-gradient(circle at center, rgba(0, 240, 255, 0.16) 0%, transparent 70%);
       border: 1px solid var(--card-border);
       border-radius: 20px;
       display: flex;
@@ -479,7 +479,7 @@
       background: var(--grad-cyan-indigo);
       color: #fff;
       border-color: transparent;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 4px 14px rgba(0, 240, 255, 0.35);
     }
 
     .dict-search-input {
@@ -518,10 +518,10 @@
     }
 
     .dict-card:hover {
-      border-color: #818cf8;
+      border-color: #00F0FF;
       background: var(--bg-card-hover);
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 240, 255, 0.25);
     }
 
     .dict-card-top {
@@ -544,26 +544,26 @@
       text-transform: uppercase;
     }
 
-    .badge-genx { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .badge-genz { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-hazard { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-genx { background: rgba(255, 230, 0, 0.2); color: #FFE600; border: 1px solid rgba(255, 230, 0, 0.3); }
+    .badge-genz { background: rgba(57, 255, 20, 0.2); color: #39FF14; border: 1px solid rgba(57, 255, 20, 0.3); }
+    .badge-hazard { background: rgba(255, 0, 122, 0.2); color: #FF007A; border: 1px solid rgba(255, 0, 122, 0.3); }
 
     .dict-box-genx {
       font-size: 11px;
       color: var(--text-light);
-      background: rgba(245, 158, 11, 0.08);
+      background: rgba(255, 230, 0, 0.08);
       border-radius: 8px;
       padding: 8px;
-      border-left: 3px solid #f59e0b;
+      border-left: 3px solid #FFE600;
     }
 
     .dict-box-genz {
       font-size: 11px;
       color: var(--text-white);
-      background: rgba(16, 185, 129, 0.08);
+      background: rgba(57, 255, 20, 0.08);
       border-radius: 8px;
       padding: 8px;
-      border-left: 3px solid #10b981;
+      border-left: 3px solid #39FF14;
       font-weight: 600;
     }
 
@@ -596,7 +596,7 @@
     }
 
     .memory-stat-item span.num {
-      color: #38bdf8;
+      color: #00F0FF;
       font-weight: 800;
       font-size: 14px;
     }
@@ -635,25 +635,25 @@
     .memory-card-front {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
       font-size: 28px;
-      color: #64748b;
+      color: #A1A1AA;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .memory-card-back {
       transform: rotateY(180deg);
       background: rgba(26, 32, 54, 0.95);
-      border-color: #6366f1;
+      border-color: #00F0FF;
       padding: 10px;
       text-align: center;
       flex-direction: column;
       gap: 4px;
-      box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
     }
 
     .memory-card.matched .memory-card-back {
-      border-color: #10b981;
-      box-shadow: 0 0 18px rgba(16, 185, 129, 0.55);
-      background: rgba(16, 185, 129, 0.18);
+      border-color: #39FF14;
+      box-shadow: 0 0 18px rgba(57, 255, 20, 0.55);
+      background: rgba(57, 255, 20, 0.18);
     }
 
     .memory-content-glyph {
@@ -719,8 +719,8 @@
     }
 
     .chart-tab-btn.active {
-      background: #8b5cf6;
-      border-color: #a78bfa;
+      background: #FF007A;
+      border-color: #FF007A;
       color: #fff;
     }
 
@@ -772,7 +772,7 @@
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 700;
-      color: #38bdf8;
+      color: #00F0FF;
       text-align: right;
     }
 
@@ -866,21 +866,21 @@
     }
 
     .wordle-tile.correct {
-      background: #10b981 !important;
-      border-color: #10b981 !important;
+      background: #39FF14 !important;
+      border-color: #39FF14 !important;
       color: #fff !important;
     }
 
     .wordle-tile.present {
-      background: #f59e0b !important;
-      border-color: #f59e0b !important;
+      background: #FFE600 !important;
+      border-color: #FFE600 !important;
       color: #fff !important;
     }
 
     .wordle-tile.absent {
       background: #1e293b !important;
       border-color: #334155 !important;
-      color: #64748b !important;
+      color: #A1A1AA !important;
     }
 
     .wordle-keyboard {
@@ -918,8 +918,8 @@
 
     .key-btn.wide { min-width: 52px; font-size: 11px; }
     .key-btn:hover { background: rgba(255, 255, 255, 0.18); transform: translateY(-1px); }
-    .key-btn.correct { background: #10b981; color: #fff; }
-    .key-btn.present { background: #f59e0b; color: #fff; }
+    .key-btn.correct { background: #39FF14; color: #fff; }
+    .key-btn.present { background: #FFE600; color: #fff; }
     .key-btn.absent { background: #1e293b; color: #475569; }
 
     .wordle-info-card {
@@ -933,12 +933,12 @@
     }
 
     .wordle-hint-box {
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.3);
       border-radius: 12px;
       padding: 14px;
       font-size: 13px;
-      color: #c7d2fe;
+      color: #00F0FF;
       line-height: 1.45;
     }
 
@@ -998,8 +998,8 @@
     }
 
     .country-input:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+      border-color: #00F0FF;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.35);
     }
 
     .country-feedback-box {
@@ -1055,9 +1055,9 @@
       height: 220px;
       position: relative;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(15, 23, 42, 0.8) 70%);
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, rgba(15, 23, 42, 0.8) 70%);
       border: 2px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 35px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1099,7 +1099,7 @@
       font-size: 11px;
       font-family: var(--font-mono);
       font-weight: 700;
-      color: #38bdf8;
+      color: #00F0FF;
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
@@ -1125,8 +1125,8 @@
     }
 
     .avatar-option-btn:hover, .avatar-option-btn.active {
-      background: rgba(99, 102, 241, 0.25);
-      border-color: #818cf8;
+      background: rgba(0, 240, 255, 0.25);
+      border-color: #00F0FF;
       transform: scale(1.1);
     }
 
@@ -1155,7 +1155,7 @@
     .trivia-q-num {
       font-family: var(--font-mono);
       font-size: 12px;
-      color: #38bdf8;
+      color: #00F0FF;
       font-weight: 700;
     }
 
@@ -1164,9 +1164,9 @@
       font-size: 12px;
       padding: 4px 10px;
       border-radius: 6px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #10b981;
+      background: rgba(57, 255, 20, 0.15);
+      border: 1px solid rgba(57, 255, 20, 0.3);
+      color: #39FF14;
       font-weight: 700;
     }
 
@@ -1199,21 +1199,21 @@
     }
 
     .trivia-answer-btn:hover {
-      background: rgba(99, 102, 241, 0.12);
-      border-color: #818cf8;
+      background: rgba(0, 240, 255, 0.12);
+      border-color: #00F0FF;
       transform: translateX(3px);
     }
 
     .trivia-answer-btn.correct-glow {
-      background: rgba(16, 185, 129, 0.25) !important;
-      border-color: #10b981 !important;
+      background: rgba(57, 255, 20, 0.25) !important;
+      border-color: #39FF14 !important;
       color: #fff !important;
     }
 
     .trivia-answer-btn.wrong-glow {
-      background: rgba(239, 68, 68, 0.25) !important;
-      border-color: #ef4444 !important;
-      color: #fca5a5 !important;
+      background: rgba(255, 0, 122, 0.25) !important;
+      border-color: #FF007A !important;
+      color: #FF007A !important;
     }
 
     .trivia-feedback-panel {
@@ -1225,8 +1225,8 @@
     }
 
     .trivia-feedback-panel.active { display: block; }
-    .trivia-feedback-panel.success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; }
-    .trivia-feedback-panel.failure { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+    .trivia-feedback-panel.success { background: rgba(57, 255, 20, 0.15); border: 1px solid rgba(57, 255, 20, 0.3); color: #39FF14; }
+    .trivia-feedback-panel.failure { background: rgba(255, 0, 122, 0.15); border: 1px solid rgba(255, 0, 122, 0.3); color: #FF007A; }
 
     /* ==========================================================================
        12. SLIDE 9: HISTORICAL EVOLUTION (DOCOMO TO UNICODE)
@@ -1246,7 +1246,7 @@
       left: 30px;
       right: 30px;
       height: 2px;
-      background: linear-gradient(90deg, #38bdf8, #818cf8, #ec4899, #10b981);
+      background: linear-gradient(90deg, #00F0FF, #00F0FF, #FF007A, #39FF14);
       z-index: 1;
       opacity: 0.5;
     }
@@ -1263,8 +1263,8 @@
     }
 
     .history-card:hover, .history-card.active {
-      border-color: #818cf8;
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.25);
+      border-color: #00F0FF;
+      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.25);
       transform: translateY(-4px);
     }
 
@@ -1273,20 +1273,20 @@
       height: 34px;
       border-radius: 50%;
       background: #0f172a;
-      border: 2px solid #818cf8;
+      border: 2px solid #00F0FF;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 16px;
       margin-bottom: 12px;
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
     }
 
     .history-year {
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 700;
-      color: #38bdf8;
+      color: #00F0FF;
       margin-bottom: 4px;
     }
 
@@ -1343,14 +1343,14 @@
 
     .arcade-hud-item span.val {
       font-weight: 800;
-      color: #38bdf8;
+      color: #00F0FF;
       font-size: 14px;
     }
 
     .arcade-stage {
       position: relative;
       height: 380px;
-      background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.12) 0%, rgba(7, 9, 14, 0.9) 100%);
+      background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.12) 0%, rgba(7, 9, 14, 0.9) 100%);
       border: 1px solid var(--card-border);
       border-radius: 16px;
       overflow: hidden;
@@ -1373,13 +1373,13 @@
       font-family: var(--font-mono);
       font-size: 14px;
       font-weight: 800;
-      color: #10b981;
+      color: #39FF14;
       pointer-events: none;
       animation: float-up-fade 0.8s ease forwards;
     }
 
     .floating-score-tag.penalty {
-      color: #ef4444;
+      color: #FF007A;
     }
 
     @keyframes float-up-fade {
@@ -1421,7 +1421,7 @@
       text-align: center;
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(0, 240, 255, 0.35);
       z-index: 10;
       position: relative;
     }
@@ -1431,7 +1431,7 @@
       font-size: 44px;
       pointer-events: none;
       user-select: none;
-      filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.6));
+      filter: drop-shadow(0 0 15px rgba(255, 0, 122, 0.6));
       animation: drift-and-pulse 6s infinite ease-in-out alternate;
     }
 
@@ -1481,7 +1481,7 @@
     .nav-dot.active {
       width: 32px;
       background: var(--grad-cyan-indigo);
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.8);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
     }
 
     .nav-dot::after {
@@ -1542,11 +1542,11 @@
       background: var(--grad-cyan-indigo);
       color: #ffffff;
       border: none;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.4);
     }
 
     .nav-btn.primary:hover {
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+      box-shadow: 0 6px 20px rgba(0, 240, 255, 0.6);
       transform: translateY(-2px);
     }
 
@@ -1570,9 +1570,136 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+    /* VERSION 3 — Emoji theme specification. Light slides use ink for contrast. */
+    :root {
+      --yellow: #FFE600; --pink: #FF007A; --cyan: #00F0FF; --green: #39FF14;
+      --bg-dark: #121214; --bg-card: rgba(255,255,255,.05);
+      --bg-card-hover: rgba(255,255,255,.08);
+      --card-border: rgba(0,240,255,.3); --card-border-glow: #FF007A;
+      --text-white: #FAFAFA; --text-light: #FAFAFA;
+      --text-muted: #A1A1AA; --text-dim: #A1A1AA;
+      --font-display: 'Unkempt', cursive;
+      --shadow-neon: 0 10px 30px rgba(0,240,255,.2);
+      --grad-cyan-indigo: linear-gradient(135deg,#00F0FF,#39FF14);
+      --grad-purple-pink: linear-gradient(135deg,#FF007A,#FFE600);
+      --grad-emerald-cyan: linear-gradient(135deg,#39FF14,#00F0FF);
+      --grad-gold-rose: linear-gradient(135deg,#FFE600,#FF007A);
+    }
+    body { background: #121214; }
+    body::before { opacity: .35; }
+    button, input { font-family: var(--font-main); }
+    #three-bg-canvas { opacity: .25; }
+    .deck-viewport { background: #121214; border-radius: 20px; }
+    .deck-header, .deck-footer { background: #121214; }
+    .deck-progress-fill { background: #FFE600; box-shadow: 0 0 12px rgba(255,230,0,.35); }
+    .slide { background: #121214; padding: 28px 36px; }
+    h1, h2, h3, .slide-title, .hero-stat-num, .history-year,
+    .memory-stat-item .num, .arcade-hud-item .val {
+      font-family: var(--font-display); font-weight: 700;
+      color: #FFE600; text-transform: none;
+      text-shadow: 0 0 12px rgba(255,230,0,.35);
+    }
+    .slide-title { font-size: clamp(28px,3vw,42px); line-height: 1.12; margin-bottom: 10px; }
+    .slide-title span.glow-gradient, .slide-title span.glow-pink,
+    .slide-title span.glow-green, .hero-stat-num {
+      background: none; -webkit-text-fill-color: currentColor;
+    }
+    .slide-title span.glow-gradient { color: #00F0FF; text-shadow: 0 0 12px rgba(0,240,255,.25); }
+    .slide-title span.glow-pink { color: #FF007A; text-shadow: 0 0 12px rgba(255,0,122,.2); }
+    .slide-title span.glow-green { color: #39FF14; }
+    .subtitle, .slide-desc { font-weight: 500; color: #00F0FF; }
+    .slide-desc { font-size: clamp(13px,1.2vw,15px); line-height: 1.55; margin-bottom: 22px; }
+    .hero-layout h1 { font-size: clamp(40px,4.4vw,62px); max-width: 560px; }
+    .hero-layout .slide-desc { max-width: 560px; }
+    .hero-stat-num { font-size: 34px; }
+    .hero-stat-label { font-size: 12px; }
+    .card, .glass-card, .hero-stat-card, .hero-3d-wrapper, .dict-card,
+    .analytics-chart-box, .insight-card, .wordle-info-card, .country-card-main,
+    .country-stats-panel, .avatar-stage-box, .avatar-controls-box, .trivia-game-box,
+    .history-card, .moma-tribute-box, .arcade-container, .arcade-stage, .thankyou-card {
+      border-radius: 20px; background: var(--bg-card);
+      border: 1px solid rgba(0,240,255,.3);
+      box-shadow: 0 10px 30px rgba(0,240,255,.2);
+    }
+    .glass-card, .analytics-chart-box, .wordle-info-card, .country-stats-panel,
+    .avatar-controls-box, .trivia-game-box { padding: 24px; }
+    .dict-card:hover, .glass-card:hover, .history-card:hover, .history-card.active {
+      border: 2px solid #FF007A; box-shadow: 0 10px 30px rgba(255,0,122,.2);
+    }
+    .hero-3d-wrapper { background: radial-gradient(circle,rgba(255,230,0,.10),transparent 70%); }
+    .nav-btn.primary { background: #FFE600; color: #121214; font-weight: 700; box-shadow: 0 10px 30px rgba(255,230,0,.2); }
+    .nav-btn.primary:hover { box-shadow: 0 10px 30px rgba(255,230,0,.35); }
+    .nav-dot.active { background: #FFE600; box-shadow: 0 0 12px rgba(255,230,0,.35); }
+    .dict-filter-btn.active, .chart-tab-btn.active { background: #FFE600; color: #121214; border-color: #FFE600; }
+    .dict-filter-btn:hover { background: #00F0FF; color: #121214; }
+    .avatar-option-btn.active { border: 2px solid #FF007A; background: rgba(255,0,122,.12); }
+    .dict-glyph, .memory-content-glyph, .falling-emoji-item { font-size: 48px; }
+    .history-pin { width: 64px; height: 64px; font-size: 48px; background: transparent; border: none; box-shadow: none; }
+    .avatar-layer.base { font-size: 96px; }
+    .memory-card-front, .memory-card-back { border-radius: 20px; background: #1e1e20; }
+    .memory-card-front { color: #FFE600; font-family: var(--font-display); font-size: 48px; }
+    .memory-card.matched .memory-card-back { background: rgba(57,255,20,.12); }
+    .wordle-hint-box { color: #00F0FF; }
+    .wordle-tile.correct, .key-btn.correct { background: #39FF14 !important; border-color: #39FF14 !important; color: #121214 !important; }
+    .wordle-tile.present, .key-btn.present { background: #FFE600 !important; border-color: #FFE600 !important; color: #121214 !important; }
+    .trivia-answer-btn.correct-glow { color: #39FF14 !important; }
+    .trivia-answer-btn.wrong-glow { color: #FF007A !important; }
+    .arcade-stage { background: #121214; }
+    .arcade-overlay, .memory-win-banner { background: rgba(18,18,20,.96); }
+    .thankyou-card { box-shadow: 0 10px 30px rgba(255,230,0,.2); border-color: rgba(255,230,0,.4); }
+    .text-pink { color: #FF007A; } .text-cyan { color: #00F0FF; }
+    .text-yellow { color: #FFE600; } .text-green { color: #39FF14; }
+    /* Data and text-heavy slides: neutral ink and translucent black cards. */
+    .slide-light {
+      background: #FAFAFA; color: #121214; color-scheme: light;
+      --bg-card: rgba(0,0,0,.03); --bg-card-hover: rgba(0,0,0,.05);
+      --text-white: #121214; --text-light: #121214;
+      --text-muted: #52525B; --text-dim: #52525B;
+    }
+    .slide-light .slide-title, .slide-light h3 { color: #121214; text-shadow: none; }
+    .slide-light .slide-title span { color: #121214; text-shadow: none; text-decoration: underline; text-decoration-color: #FFE600; text-decoration-thickness: 6px; text-underline-offset: 5px; }
+    .slide-light .slide-desc { color: #52525B; }
+    .slide-light .dict-box-genx { border-left-color: #FFE600; }
+    .slide-light .dict-box-genz { border-left-color: #39FF14; }
+    .slide-light .dict-search-input { background: rgba(0,0,0,.03); color: #121214; }
+    .slide-light .dict-filter-btn, .slide-light .chart-tab-btn { color: #52525B; background: rgba(0,0,0,.03); }
+    .slide-light .dict-filter-btn.active, .slide-light .chart-tab-btn.active { color: #121214; background: #FFE600; }
+    .slide-light .dict-badge { color: #121214; font-weight: 700; }
+    .slide-light .dict-grid { max-height: none; overflow: visible; }
+    .slide-light .bar-val, .slide-light .history-year { color: #121214; text-shadow: none; }
+    .slide-light .bar-track { background: rgba(0,0,0,.08); }
+    .slide-light .bar-fill { background: #FF007A; }
+    .slide-light .history-title { font-size: 22px; }
+    .slide-light .history-year { font-size: 18px; }
+    .slide-light .history-desc, .slide-light .insight-text { font-size: 13px; line-height: 1.55; }
+    .slide-light .insight-title { font-size: 15px; }
+    .slide-light .history-timeline-track::before { background: #00F0FF; }
+    :focus-visible { outline: 3px solid #FF007A; outline-offset: 4px; }
+    @media (max-width: 600px) {
+      .slide { padding: 22px 18px; }
+      .deck-header, .deck-footer { padding-left: 16px; padding-right: 16px; }
+      .hero-layout { gap: 24px; height: auto; }
+      .hero-layout h1 { font-size: 42px; }
+      .hero-stats-row { gap: 8px; }
+      .hero-stat-card { padding: 12px; } .hero-stat-num { font-size: 26px; }
+      .dict-grid, .history-timeline-track, .trivia-answers-grid { grid-template-columns: 1fr; }
+      .dict-grid { max-height: none; overflow: visible; }
+      .dict-search-input { margin-left: 0; width: 100%; }
+      .dots-nav { gap: 5px; } .nav-dot { width: 7px; height: 7px; } .nav-dot.active { width: 16px; }
+      .nav-btn { padding: 8px 10px; } .btn-nav-group { gap: 6px; } .key-hint { display: none; }
+      .bar-row { grid-template-columns: 30px 90px 1fr 44px; gap: 6px; }
+      .analytics-chart-box > div:first-child { flex-wrap: wrap; gap: 12px; }
+      .memory-game-header, .memory-stats-group { flex-wrap: wrap; gap: 10px; }
+      .key-btn { min-width: 0; padding: 0 7px; } .wordle-tile { width: 44px; height: 44px; }
+      .country-emoji-display { font-size: 48px; letter-spacing: 4px; }
+      .country-input-row { flex-wrap: wrap; } .country-input { width: 100%; }
+      .thankyou-card { padding: 28px 20px; } .thankyou-wrapper { min-height: 500px; }
+    }
+
   </style>
 </head>
-<body onload="brython(1)">
+<body onload="if (typeof brython === 'function') brython(1)">
 
   <!-- Ambient Three.js Background Particle Canvas -->
   <canvas id="three-bg-canvas"></canvas>
@@ -1658,7 +1785,7 @@
       <!-- ================================================================
            SLIDE 2: EMOJI DICTIONARY (GEN Z VS GEN X PERSPECTIVE)
            ================================================================ -->
-      <section class="slide" data-index="2" data-title="Emoji Dictionary">
+      <section class="slide slide-light" data-index="2" data-title="Emoji Dictionary">
         <h2 class="slide-title">
           The Generational <span class="glow-pink">Emoji Dictionary</span>
         </h2>
@@ -1724,7 +1851,7 @@
       <!-- ================================================================
            SLIDE 4: POPULAR EMOJI ANALYTICS (STATISTICAL BAR CHARTS)
            ================================================================ -->
-      <section class="slide" data-index="4" data-title="Emoji Analytics">
+      <section class="slide slide-light" data-index="4" data-title="Emoji Analytics">
         <h2 class="slide-title">
           Popular Emoji <span class="glow-pink">Global Analytics</span>
         </h2>
@@ -1810,7 +1937,7 @@
           <!-- Clue & Status Card -->
           <div class="wordle-info-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:11px; font-family:var(--font-mono); color:#10b981;">CURRENT PUZZLE</span>
+              <span style="font-size:11px; font-family:var(--font-mono); color:#39FF14;">CURRENT PUZZLE</span>
               <button class="nav-btn" onclick="resetWordleGame()" style="padding:4px 10px; font-size:11px;">
                 🔄 New Word
               </button>
@@ -1852,7 +1979,7 @@
         <div class="country-game-layout">
           <!-- Main Puzzle Card -->
           <div class="country-card-main">
-            <div style="font-size:11px; font-family:var(--font-mono); color:#38bdf8; text-transform:uppercase; letter-spacing:0.12em;">
+            <div style="font-size:11px; font-family:var(--font-mono); color:#00F0FF; text-transform:uppercase; letter-spacing:0.12em;">
               DECRYPT THE NATION
             </div>
 
@@ -1886,19 +2013,19 @@
 
             <div class="country-stat-badge">
               <span>Solved Countries:</span>
-              <strong style="color:#10b981; font-family:var(--font-mono);" id="country-solved-count">0</strong>
+              <strong style="color:#39FF14; font-family:var(--font-mono);" id="country-solved-count">0</strong>
             </div>
             <div class="country-stat-badge">
               <span>Current Streak:</span>
-              <strong style="color:#f59e0b; font-family:var(--font-mono);" id="country-streak-count">🔥 x0</strong>
+              <strong style="color:#FFE600; font-family:var(--font-mono);" id="country-streak-count">🔥 x0</strong>
             </div>
 
-            <div id="country-hint-box" style="display:none; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.3); border-radius:12px; padding:12px; font-size:12px; color:#c7d2fe; line-height:1.45;">
+            <div id="country-hint-box" style="display:none; background:rgba(0,240,255,0.12); border:1px solid rgba(0,240,255,0.3); border-radius:12px; padding:12px; font-size:12px; color:#00F0FF; line-height:1.45;">
               <!-- Dynamic hint displayed here -->
             </div>
 
             <div style="background:rgba(0,0,0,0.25); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.06); font-size:11px; color:var(--text-muted); line-height:1.5;">
-              <strong style="color:#38bdf8;">Cultural Semiotics Note:</strong> Emojis synthesize national identity into quintessential signifiers: culinary heritage, geography, wildlife, and architecture.
+              <strong style="color:#00F0FF;">Cultural Semiotics Note:</strong> Emojis synthesize national identity into quintessential signifiers: culinary heritage, geography, wildlife, and architecture.
             </div>
           </div>
         </div>
@@ -2011,7 +2138,7 @@
       <!-- ================================================================
            SLIDE 9: HISTORICAL EVOLUTION (DOCOMO TO UNICODE)
            ================================================================ -->
-      <section class="slide" data-index="9" data-title="Historical Evolution">
+      <section class="slide slide-light" data-index="9" data-title="Historical Evolution">
         <h2 class="slide-title">
           From NTT DoCoMo to <span class="glow-pink">Universal Standard</span>
         </h2>
@@ -2551,11 +2678,11 @@ window.PythonBridge = {
       const colors = new Float32Array(particleCount * 3);
 
       const colorPalette = [
-        new THREE.Color(0x38bdf8),
-        new THREE.Color(0xf59e0b),
-        new THREE.Color(0xec4899),
-        new THREE.Color(0x10b981),
-        new THREE.Color(0x8b5cf6)
+        new THREE.Color(0x00F0FF),
+        new THREE.Color(0xFFE600),
+        new THREE.Color(0xFF007A),
+        new THREE.Color(0x39FF14),
+        new THREE.Color(0xFF007A)
       ];
 
       for (let i = 0; i < particleCount; i++) {
@@ -2582,7 +2709,7 @@ window.PythonBridge = {
       bgParticles = new THREE.Points(geometry, material);
       bgScene.add(bgParticles);
 
-      bgLight = new THREE.PointLight(0x6366f1, 2, 80);
+      bgLight = new THREE.PointLight(0x00F0FF, 2, 80);
       bgLight.position.set(0, 10, 20);
       bgScene.add(bgLight);
 
@@ -2606,8 +2733,8 @@ window.PythonBridge = {
     function updateAmbientThreeLight(slideNum) {
       if (!bgLight) return;
       const themeColors = [
-        0x6366f1, 0xec4899, 0x10b981, 0x06b6d4, 0x8b5cf6, 
-        0x38bdf8, 0xec4899, 0xf59e0b, 0x06b6d4, 0x10b981, 0xec4899
+        0x00F0FF, 0xFF007A, 0x39FF14, 0x00F0FF, 0xFF007A, 
+        0x00F0FF, 0xFF007A, 0xFFE600, 0x00F0FF, 0x39FF14, 0xFF007A
       ];
       const targetColor = new THREE.Color(themeColors[(slideNum - 1) % themeColors.length]);
       bgLight.color.lerp(targetColor, 0.8);
@@ -2641,7 +2768,7 @@ window.PythonBridge = {
       mainLight.position.set(4, 6, 5);
       heroScene.add(mainLight);
 
-      const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
+      const rimLight = new THREE.DirectionalLight(0x00F0FF, 1.2);
       rimLight.position.set(-5, -3, 3);
       heroScene.add(rimLight);
 
@@ -3221,7 +3348,7 @@ window.PythonBridge = {
           submitWordleGuess();
         } else {
           playSynthesizedSound('wrong');
-          showMessageWordle('Need 5 letters to submit!', '#ef4444');
+          showMessageWordle('Need 5 letters to submit!', '#FF007A');
         }
       } else if (/^[A-Z]$/.test(key)) {
         if (wordleCol < 5) {
@@ -3280,11 +3407,11 @@ window.PythonBridge = {
         if (guess === targetWord) {
           wordleGameOver = true;
           playSynthesizedSound('success');
-          showMessageWordle(`FLUENCY CONFIRMED! Word was ${targetWord}! 🏆`, '#10b981');
+          showMessageWordle(`FLUENCY CONFIRMED! Word was ${targetWord}! 🏆`, '#39FF14');
         } else if (wordleRow === 5) {
           wordleGameOver = true;
           playSynthesizedSound('wrong');
-          showMessageWordle(`GAME OVER! Word was ${targetWord} 💀`, '#ef4444');
+          showMessageWordle(`GAME OVER! Word was ${targetWord} 💀`, '#FF007A');
         } else {
           wordleRow++;
           wordleCol = 0;
@@ -3405,7 +3532,7 @@ window.PythonBridge = {
         playSynthesizedSound('success');
         countrySolvedCount++;
         countryStreak++;
-        feedback.innerHTML = `<span style="color:#10b981;">✓ CORRECT! It is ${currentCountryPuzzle.name}! 🏆</span>`;
+        feedback.innerHTML = `<span style="color:#39FF14;">✓ CORRECT! It is ${currentCountryPuzzle.name}! 🏆</span>`;
         document.getElementById('country-solved-count').textContent = countrySolvedCount;
         document.getElementById('country-streak-count').textContent = `🔥 x${countryStreak}`;
 
@@ -3416,7 +3543,7 @@ window.PythonBridge = {
         playSynthesizedSound('wrong');
         countryStreak = 0;
         document.getElementById('country-streak-count').textContent = `🔥 x0`;
-        feedback.innerHTML = `<span style="color:#ef4444;">✗ Not quite right. Try again or ask for a hint!</span>`;
+        feedback.innerHTML = `<span style="color:#FF007A;">✗ Not quite right. Try again or ask for a hint!</span>`;
       }
     }
 
@@ -3666,7 +3793,7 @@ window.PythonBridge = {
         document.getElementById('trivia-options').innerHTML = `
           <div style="grid-column: span 2; text-align:center; padding:24px; background:rgba(0,0,0,0.3); border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
             <div style="font-size:38px; margin-bottom:8px;">🎖️</div>
-            <div style="font-size:16px; font-weight:800; color:#38bdf8; margin-bottom:6px;">${rankTitle}</div>
+            <div style="font-size:16px; font-weight:800; color:#00F0FF; margin-bottom:6px;">${rankTitle}</div>
             <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">
               You navigated the treacherous waters of generational semiotics and tone inversion.
             </p>
@@ -3915,8 +4042,21 @@ window.PythonBridge = {
        N. DOM CONTENT LOADED BOOTSTRAP
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', () => {
-      initThreeBackground();
-      initHeroThreeScene();
+      // Optional 3D assets must not block the dictionary and games.
+      try {
+        if (typeof THREE === 'undefined') throw new Error('3D library unavailable');
+        initThreeBackground();
+        initHeroThreeScene();
+      } catch (error) {
+        document.getElementById('hero-canvas-3d').hidden = true;
+        const fallback = document.createElement('div');
+        fallback.textContent = '😀';
+        fallback.style.cssText = 'font-size:96px;line-height:1;';
+        fallback.setAttribute('role', 'img');
+        fallback.setAttribute('aria-label', 'Smiling emoji');
+        document.querySelector('.hero-3d-wrapper').prepend(fallback);
+        document.querySelector('.hero-canvas-hint').textContent = '✨ Explore the language of emojis';
+      }
       renderDictionaryCards(dictionaryDatabase);
       initMemoryGame();
       renderBarChart('global');
