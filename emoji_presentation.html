@@ -985,6 +985,7 @@
 
     .country-input {
       flex: 1;
+      min-width: 0;
       padding: 12px 18px;
       border-radius: 12px;
       font-size: 15px;
@@ -1588,15 +1589,11 @@
     <header class="deck-header">
       <div class="deck-brand">
         <div class="brand-emoji-badge" id="brand-badge">🎭</div>
-        <div class="brand-title">
-          <span>Emoji Semiotics</span>
-          <span class="brand-subtitle">Generational Lexicon & Interactive Arcade</span>
-        </div>
       </div>
 
       <div class="deck-meta-controls">
         <div class="slide-badge-counter">
-          SLIDE <span class="highlight" id="current-slide-num">01</span> / <span id="total-slide-num">10</span>
+          SLIDE <span class="highlight" id="current-slide-num">01</span> / <span id="total-slide-num">11</span>
         </div>
         <button class="icon-btn" id="audio-toggle-btn" title="Toggle UI Sound Effects (M)">
           🔊
@@ -1616,7 +1613,6 @@
       <section class="slide active" data-index="1" data-title="Title & Hero">
         <div class="hero-layout">
           <div>
-            <div class="slide-tag">01 // Cultural Semiotics & Generational Linguistics</div>
             <h1 class="slide-title">
               The Secret Language of <span class="glow-gradient">Emojis</span>
             </h1>
@@ -1663,7 +1659,6 @@
            SLIDE 2: EMOJI DICTIONARY (GEN Z VS GEN X PERSPECTIVE)
            ================================================================ -->
       <section class="slide" data-index="2" data-title="Emoji Dictionary">
-        <div class="slide-tag">02 // Generational Decryption Matrix</div>
         <h2 class="slide-title">
           The Generational <span class="glow-pink">Emoji Dictionary</span>
         </h2>
@@ -1688,7 +1683,6 @@
            SLIDE 3: MEMORY GAME (PAIRING EMOJIS WITH CULTURAL MEANINGS)
            ================================================================ -->
       <section class="slide" data-index="3" data-title="Memory Game">
-        <div class="slide-tag">03 // Interactive Mini-Game #1</div>
         <h2 class="slide-title">
           Generational <span class="glow-gradient">Memory Match</span>
         </h2>
@@ -1731,7 +1725,6 @@
            SLIDE 4: POPULAR EMOJI ANALYTICS (STATISTICAL BAR CHARTS)
            ================================================================ -->
       <section class="slide" data-index="4" data-title="Emoji Analytics">
-        <div class="slide-tag">04 // Empirical Data Visualization</div>
         <h2 class="slide-title">
           Popular Emoji <span class="glow-pink">Global Analytics</span>
         </h2>
@@ -1794,7 +1787,6 @@
            SLIDE 5: EMOJI WORDLE (TEXT CLUES INSTEAD OF PICTURES)
            ================================================================ -->
       <section class="slide" data-index="5" data-title="Emoji Wordle">
-        <div class="slide-tag">05 // Interactive Mini-Game #2</div>
         <h2 class="slide-title">
           The Generational <span class="glow-green">Emoji Wordle</span>
         </h2>
@@ -1850,7 +1842,6 @@
            SLIDE 6: GUESS THE COUNTRY BY EMOJI
            ================================================================ -->
       <section class="slide" data-index="6" data-title="Guess the Country">
-        <div class="slide-tag">06 // Interactive Mini-Game #3</div>
         <h2 class="slide-title">
           Guess the Country by <span class="glow-gradient">Emoji Triad</span>
         </h2>
@@ -1870,7 +1861,8 @@
             </div>
 
             <div class="country-input-row">
-              <input type="text" class="country-input" id="country-guess-input" placeholder="Type country name..." onkeydown="handleCountryKeyDown(event)">
+              <input type="text" class="country-input" id="country-guess-input" list="country-options" aria-label="Country" autocomplete="off" placeholder="Type or select a country..." onkeydown="handleCountryKeyDown(event)">
+              <datalist id="country-options"></datalist>
               <button class="nav-btn primary" onclick="submitCountryGuess()">
                 Submit Guess
               </button>
@@ -1916,7 +1908,6 @@
            SLIDE 7: EMOJI AVATAR BUILDER
            ================================================================ -->
       <section class="slide" data-index="7" data-title="Avatar Builder">
-        <div class="slide-tag">07 // Interactive Creator Studio</div>
         <h2 class="slide-title">
           Interactive <span class="glow-pink">Emoji Avatar Builder</span>
         </h2>
@@ -1981,7 +1972,6 @@
            SLIDE 8: TRIVIA CHALLENGE
            ================================================================ -->
       <section class="slide" data-index="8" data-title="Trivia Challenge">
-        <div class="slide-tag">08 // Interactive Knowledge Quiz</div>
         <h2 class="slide-title">
           Generational <span class="glow-gradient">Trivia Challenge</span>
         </h2>
@@ -2022,7 +2012,6 @@
            SLIDE 9: HISTORICAL EVOLUTION (DOCOMO TO UNICODE)
            ================================================================ -->
       <section class="slide" data-index="9" data-title="Historical Evolution">
-        <div class="slide-tag">09 // Historical Genesis & Global Standards</div>
         <h2 class="slide-title">
           From NTT DoCoMo to <span class="glow-pink">Universal Standard</span>
         </h2>
@@ -2078,9 +2067,6 @@
               </div>
             </div>
           </div>
-          <button class="nav-btn" onclick="toggleDoCoMoDemo()" id="docomo-toggle-btn" style="white-space:nowrap; font-size:11px;">
-            Toggle 12px Pixel View
-          </button>
         </div>
       </section>
 
@@ -2088,7 +2074,6 @@
            SLIDE 10: "CATCH THE EMOJI" ARCADE MINI-GAME
            ================================================================ -->
       <section class="slide" data-index="10" data-title="Catch the Emoji">
-        <div class="slide-tag">10 // Interactive Arcade Mini-Game</div>
         <h2 class="slide-title">
           Arcade Action: <span class="glow-green">"Catch the Emoji"</span>
         </h2>
@@ -2131,7 +2116,6 @@
 
           <div class="thankyou-card">
             <div style="font-size:52px; margin-bottom:12px; animation: gentle-pulse 3s infinite ease-in-out;">💖🙏✨</div>
-            <div class="slide-tag" style="margin:0 auto 12px auto;">11 // Presentation Finale</div>
             <h2 class="slide-title" style="font-size:32px; margin-bottom:12px;">
               Thank You for <span class="glow-gradient">Exploring!</span>
             </h2>
@@ -2220,7 +2204,25 @@ class CountryTriviaEngine:
             {"name": "United States", "emojis": "🗽 🍔 🏈", "continent": "North America", "capital": "Washington, D.C."},
             {"name": "United Kingdom", "emojis": "🫖 🌧️ 👑", "continent": "Europe", "capital": "London"},
             {"name": "India", "emojis": "🍛 🐅 🛕", "continent": "Asia", "capital": "New Delhi"},
-            {"name": "Egypt", "emojis": "🏜️ 🐪 🏛️", "continent": "Africa", "capital": "Cairo"}
+            {"name": "Egypt", "emojis": "🏜️ 🐪 🏛️", "continent": "Africa", "capital": "Cairo"},
+            {"name":"China","emojis":"🐼 🧱 🥢","continent":"Asia","capital":"Beijing","difficulty":"Easy"},
+            {"name":"Greece","emojis":"🏛️ 🫒 🌊","continent":"Europe","capital":"Athens","difficulty":"Easy"},
+            {"name":"Spain","emojis":"💃 🥘 🐂","continent":"Europe","capital":"Madrid","difficulty":"Easy"},
+            {"name":"New Zealand","emojis":"🥝 🐑 🏉","continent":"Oceania","capital":"Wellington","difficulty":"Easy"},
+            {"name":"Switzerland","emojis":"🧀 ⌚ 🏔️","continent":"Europe","capital":"Bern","difficulty":"Easy"},
+            {"name":"Netherlands","emojis":"🌷 🚲 🌬️","continent":"Europe","capital":"Amsterdam","difficulty":"Medium"},
+            {"name":"Norway","emojis":"🛶 🏔️ 🌌","continent":"Europe","capital":"Oslo","difficulty":"Medium"},
+            {"name":"South Korea","emojis":"🎤 🥬 🥋","continent":"Asia","capital":"Seoul","difficulty":"Medium"},
+            {"name":"Thailand","emojis":"🐘 🍜 🛕","continent":"Asia","capital":"Bangkok","difficulty":"Medium"},
+            {"name":"Argentina","emojis":"🧉 💃 ⚽","continent":"South America","capital":"Buenos Aires","difficulty":"Medium"},
+            {"name":"Kenya","emojis":"🦁 🏃 🍵","continent":"Africa","capital":"Nairobi","difficulty":"Medium"},
+            {"name":"Morocco","emojis":"🫖 🏜️ 🧿","continent":"Africa","capital":"Rabat","difficulty":"Medium"},
+            {"name":"Nepal","emojis":"🏔️ 🥾 🙏","continent":"Asia","capital":"Kathmandu","difficulty":"Hard"},
+            {"name":"Madagascar","emojis":"🐒 🌳 🏝️","continent":"Africa","capital":"Antananarivo","difficulty":"Hard"},
+            {"name":"Bhutan","emojis":"🐉 🏔️ 🛕","continent":"Asia","capital":"Thimphu","difficulty":"Hard"},
+            {"name":"Peru","emojis":"🦙 ⛰️ 🥔","continent":"South America","capital":"Lima","difficulty":"Medium"},
+            {"name":"Iceland","emojis":"🌋 🧊 ♨️","continent":"Europe","capital":"Reykjavík","difficulty":"Medium"},
+            {"name":"Mongolia","emojis":"🐎 🏹 ⛺","continent":"Asia","capital":"Ulaanbaatar","difficulty":"Hard"}
         ]
         self.used = []
 
@@ -2280,14 +2282,8 @@ window.PythonBridge = {
       const progressPercent = (currentSlide / TOTAL_SLIDES) * 100;
       progressFill.style.width = `${progressPercent}%`;
       
-      // Keep slide counter elegant: show slide number up to 10, and on 11 show 10 (or Finale)
-      if (currentSlide <= 10) {
-        slideNumBadge.textContent = String(currentSlide).padStart(2, '0');
-        document.getElementById('total-slide-num').textContent = "10";
-      } else {
-        slideNumBadge.textContent = "11";
-        document.getElementById('total-slide-num').textContent = "11";
-      }
+      slideNumBadge.textContent = String(currentSlide).padStart(2, '0');
+      document.getElementById('total-slide-num').textContent = String(TOTAL_SLIDES);
 
       brandBadge.textContent = slideBadges[currentSlide - 1] || '🎭';
 
@@ -3323,8 +3319,42 @@ window.PythonBridge = {
       { name: "United States", emojis: "🗽 🍔 🏈", continent: "North America", capital: "Washington, D.C." },
       { name: "United Kingdom", emojis: "🫖 🌧️ 👑", continent: "Europe", capital: "London" },
       { name: "India", emojis: "🍛 🐅 🛕", continent: "Asia", capital: "New Delhi" },
-      { name: "Egypt", emojis: "🏜️ 🐪 🏛️", continent: "Africa", capital: "Cairo" }
+      { name: "Egypt", emojis: "🏜️ 🐪 🏛️", continent: "Africa", capital: "Cairo" },
+      {"name":"China","emojis":"🐼 🧱 🥢","continent":"Asia","capital":"Beijing","difficulty":"Easy"},
+      {"name":"Greece","emojis":"🏛️ 🫒 🌊","continent":"Europe","capital":"Athens","difficulty":"Easy"},
+      {"name":"Spain","emojis":"💃 🥘 🐂","continent":"Europe","capital":"Madrid","difficulty":"Easy"},
+      {"name":"New Zealand","emojis":"🥝 🐑 🏉","continent":"Oceania","capital":"Wellington","difficulty":"Easy"},
+      {"name":"Switzerland","emojis":"🧀 ⌚ 🏔️","continent":"Europe","capital":"Bern","difficulty":"Easy"},
+      {"name":"Netherlands","emojis":"🌷 🚲 🌬️","continent":"Europe","capital":"Amsterdam","difficulty":"Medium"},
+      {"name":"Norway","emojis":"🛶 🏔️ 🌌","continent":"Europe","capital":"Oslo","difficulty":"Medium"},
+      {"name":"South Korea","emojis":"🎤 🥬 🥋","continent":"Asia","capital":"Seoul","difficulty":"Medium"},
+      {"name":"Thailand","emojis":"🐘 🍜 🛕","continent":"Asia","capital":"Bangkok","difficulty":"Medium"},
+      {"name":"Argentina","emojis":"🧉 💃 ⚽","continent":"South America","capital":"Buenos Aires","difficulty":"Medium"},
+      {"name":"Kenya","emojis":"🦁 🏃 🍵","continent":"Africa","capital":"Nairobi","difficulty":"Medium"},
+      {"name":"Morocco","emojis":"🫖 🏜️ 🧿","continent":"Africa","capital":"Rabat","difficulty":"Medium"},
+      {"name":"Nepal","emojis":"🏔️ 🥾 🙏","continent":"Asia","capital":"Kathmandu","difficulty":"Hard"},
+      {"name":"Madagascar","emojis":"🐒 🌳 🏝️","continent":"Africa","capital":"Antananarivo","difficulty":"Hard"},
+      {"name":"Bhutan","emojis":"🐉 🏔️ 🛕","continent":"Asia","capital":"Thimphu","difficulty":"Hard"},
+      {"name":"Peru","emojis":"🦙 ⛰️ 🥔","continent":"South America","capital":"Lima","difficulty":"Medium"},
+      {"name":"Iceland","emojis":"🌋 🧊 ♨️","continent":"Europe","capital":"Reykjavík","difficulty":"Medium"},
+      {"name":"Mongolia","emojis":"🐎 🏹 ⛺","continent":"Asia","capital":"Ulaanbaatar","difficulty":"Hard"}
     ];
+
+    // Countries and territories, including Kosovo. Native suggestions filter as you type.
+    function initCountryCombobox() {
+      const regionCodes = 'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW XK'.split(' ');
+      const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+      const names = regionCodes.map(code => regionNames.of(code));
+      // Preserve the spelling expected by puzzles across browser region-name variants.
+      countryPuzzles.forEach(puzzle => names.push(puzzle.name));
+      const options = document.getElementById('country-options');
+      options.replaceChildren();
+      [...new Set(names)].sort((a, b) => a.localeCompare(b)).forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        options.appendChild(option);
+      });
+    }
 
     let currentCountryPuzzle = null;
     let countrySolvedCount = 0;
@@ -3395,7 +3425,7 @@ window.PythonBridge = {
       playSynthesizedSound('chime');
       const hintBox = document.getElementById('country-hint-box');
       hintBox.style.display = 'block';
-      hintBox.innerHTML = `💡 <strong>Hint:</strong> Located in <em>${currentCountryPuzzle.continent}</em>, capital city is <strong>${currentCountryPuzzle.capital}</strong>.`;
+      hintBox.innerHTML = `${currentCountryPuzzle.difficulty ? '<strong>Difficulty:</strong> ' + currentCountryPuzzle.difficulty + '<br>' : ''}💡 <strong>Hint:</strong> Located in <em>${currentCountryPuzzle.continent}</em>, capital city is <strong>${currentCountryPuzzle.capital}</strong>.`;
     }
 
     /* ==========================================================================
@@ -3564,6 +3594,7 @@ window.PythonBridge = {
 
       const feedback = document.getElementById('trivia-feedback');
       feedback.className = 'trivia-feedback-panel';
+      feedback.style.display = '';
       feedback.textContent = '';
 
       document.getElementById('trivia-next-btn').style.display = 'none';
@@ -3571,7 +3602,12 @@ window.PythonBridge = {
       const optContainer = document.getElementById('trivia-options');
       optContainer.innerHTML = '';
 
-      qData.options.forEach((opt) => {
+      const shuffledOptions = [...qData.options];
+      for (let i = shuffledOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+      }
+      shuffledOptions.forEach((opt) => {
         const btn = document.createElement('button');
         btn.className = 'trivia-answer-btn';
         btn.textContent = opt.text;
@@ -3648,18 +3684,6 @@ window.PythonBridge = {
     function highlightHistory(index) {
       playSynthesizedSound('click');
       document.querySelectorAll('.history-card').forEach((c, i) => c.classList.toggle('active', i === index));
-    }
-
-    let is12pxView = false;
-    function toggleDoCoMoDemo() {
-      playSynthesizedSound('click');
-      is12pxView = !is12pxView;
-      const btn = document.getElementById('docomo-toggle-btn');
-      btn.textContent = is12pxView ? "Reset Vector View" : "Toggle 12px Pixel View";
-      document.querySelectorAll('.history-pin').forEach(pin => {
-        pin.style.filter = is12pxView ? "contrast(200%) grayscale(100%)" : "none";
-        pin.style.imageRendering = is12pxView ? "pixelated" : "auto";
-      });
     }
 
     /* ==========================================================================
@@ -3897,6 +3921,7 @@ window.PythonBridge = {
       initMemoryGame();
       renderBarChart('global');
       initWordle();
+      initCountryCombobox();
       generateNewCountryPuzzle();
       initAvatarBuilder();
       initTriviaGame();
