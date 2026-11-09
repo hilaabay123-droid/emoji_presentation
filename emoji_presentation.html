@@ -1030,104 +1030,181 @@
     }
 
     /* ==========================================================================
-       10. SLIDE 7: EMOJI AVATAR BUILDER
+       10. SLIDE 7: EMOJI ROULETTE
        ========================================================================== */
-    .avatar-builder-layout {
+    .roulette-layout {
       display: grid;
-      grid-template-columns: 1fr 1.3fr;
+      grid-template-columns: 1fr 1.25fr;
       gap: 28px;
       align-items: center;
     }
 
-    .avatar-stage-box {
+    .roulette-stage-box {
       background: var(--bg-card);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 26px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 18px;
+      position: relative;
     }
 
-    .avatar-canvas-preview {
-      width: 220px;
-      height: 220px;
+    .roulette-wheel-wrapper {
       position: relative;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, rgba(15, 23, 42, 0.8) 70%);
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 35px rgba(0, 240, 255, 0.4);
+      width: 290px;
+      height: 290px;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: visible;
-      transition: all 0.3s ease;
     }
 
-    .avatar-layer {
+    #roulette-wheel-canvas {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.35), 0 0 0 4px rgba(255, 255, 255, 0.08);
+      transition: transform 0.1s linear;
+    }
+
+    .roulette-pointer {
       position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 24px solid #FF007A;
+      filter: drop-shadow(0 0 8px #FF007A);
+      z-index: 10;
       pointer-events: none;
-      user-select: none;
-      transition: all 0.2s ease;
     }
 
-    .avatar-layer.base { font-size: 110px; z-index: 2; line-height: 1; }
-    .avatar-layer.hat { font-size: 72px; top: -38px; z-index: 5; line-height: 1; }
-    .avatar-layer.glasses { font-size: 60px; top: 48px; z-index: 4; line-height: 1; }
-    .avatar-layer.accessory { font-size: 46px; right: 10px; bottom: 16px; z-index: 6; line-height: 1; }
+    .roulette-spin-btn {
+      padding: 12px 32px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+    }
 
-    .avatar-controls-box {
+    .roulette-spin-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .roulette-status-text {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      min-height: 18px;
+      text-align: center;
+    }
+
+    .roulette-result-card {
       background: var(--bg-card);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 22px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       gap: 14px;
-      max-height: 450px;
-      overflow-y: auto;
+      min-height: 380px;
+      justify-content: center;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
     }
 
-    .avatar-picker-section {
+    .roulette-result-card.revealed {
+      border-color: rgba(0, 240, 255, 0.5);
+      box-shadow: 0 10px 40px rgba(0, 240, 255, 0.18);
+    }
+
+    .roulette-hero-display {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .roulette-hero-glyph {
+      font-size: 68px;
+      line-height: 1;
+      width: 86px;
+      height: 86px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+      animation: gentle-pulse 3s infinite ease-in-out;
+    }
+
+    .roulette-hero-meta {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .avatar-picker-title {
-      font-size: 11px;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      color: #00F0FF;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+    .roulette-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-white);
     }
 
-    .avatar-options-grid {
+    .roulette-badges-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .avatar-option-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.15s ease;
+    .roulette-comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
-    .avatar-option-btn:hover, .avatar-option-btn.active {
-      background: rgba(0, 240, 255, 0.25);
-      border-color: #00F0FF;
-      transform: scale(1.1);
+    .roulette-lore-text {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.55;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .roulette-tip-text {
+      font-size: 12px;
+      color: #FFE600;
+      line-height: 1.5;
+      background: rgba(255, 230, 0, 0.08);
+      border-left: 3px solid #FFE600;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+
+    .roulette-history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 10px;
+      margin-top: 4px;
     }
 
     /* ==========================================================================
@@ -1563,7 +1640,7 @@
     @media (max-width: 1024px) {
       .deck-viewport { height: 98vh; border-radius: 12px; }
       .hero-layout, .analytics-stage-grid, .wordle-wrapper, 
-      .country-game-layout, .avatar-builder-layout {
+      .country-game-layout, .roulette-layout, .avatar-builder-layout {
         grid-template-columns: 1fr;
       }
       .dict-grid, .history-timeline-track, .memory-grid {
@@ -1571,7 +1648,7 @@
       }
     }
 
-    /* VERSION 3 — Emoji theme specification. Light slides use ink for contrast. */
+    /* VERSION 3 — Emoji theme specification. Unified Dark Theme across all slides. */
     :root {
       --yellow: #FFE600; --pink: #FF007A; --cyan: #00F0FF; --green: #39FF14;
       --bg-dark: #121214; --bg-card: rgba(255,255,255,.05);
@@ -1616,14 +1693,14 @@
     .hero-stat-label { font-size: 12px; }
     .card, .glass-card, .hero-stat-card, .hero-3d-wrapper, .dict-card,
     .analytics-chart-box, .insight-card, .wordle-info-card, .country-card-main,
-    .country-stats-panel, .avatar-stage-box, .avatar-controls-box, .trivia-game-box,
+    .country-stats-panel, .roulette-stage-box, .roulette-result-card, .avatar-stage-box, .avatar-controls-box, .trivia-game-box,
     .history-card, .moma-tribute-box, .arcade-container, .arcade-stage, .thankyou-card {
       border-radius: 20px; background: var(--bg-card);
       border: 1px solid rgba(0,240,255,.3);
       box-shadow: 0 10px 30px rgba(0,240,255,.2);
     }
     .glass-card, .analytics-chart-box, .wordle-info-card, .country-stats-panel,
-    .avatar-controls-box, .trivia-game-box { padding: 24px; }
+    .roulette-result-card, .avatar-controls-box, .trivia-game-box { padding: 24px; }
     .dict-card:hover, .glass-card:hover, .history-card:hover, .history-card.active {
       border: 2px solid #FF007A; box-shadow: 0 10px 30px rgba(255,0,122,.2);
     }
@@ -1650,31 +1727,6 @@
     .thankyou-card { box-shadow: 0 10px 30px rgba(255,230,0,.2); border-color: rgba(255,230,0,.4); }
     .text-pink { color: #FF007A; } .text-cyan { color: #00F0FF; }
     .text-yellow { color: #FFE600; } .text-green { color: #39FF14; }
-    /* Data and text-heavy slides: neutral ink and translucent black cards. */
-    .slide-light {
-      background: #FAFAFA; color: #121214; color-scheme: light;
-      --bg-card: rgba(0,0,0,.03); --bg-card-hover: rgba(0,0,0,.05);
-      --text-white: #121214; --text-light: #121214;
-      --text-muted: #52525B; --text-dim: #52525B;
-    }
-    .slide-light .slide-title, .slide-light h3 { color: #121214; text-shadow: none; }
-    .slide-light .slide-title span { color: #121214; text-shadow: none; text-decoration: underline; text-decoration-color: #FFE600; text-decoration-thickness: 6px; text-underline-offset: 5px; }
-    .slide-light .slide-desc { color: #52525B; }
-    .slide-light .dict-box-genx { border-left-color: #FFE600; }
-    .slide-light .dict-box-genz { border-left-color: #39FF14; }
-    .slide-light .dict-search-input { background: rgba(0,0,0,.03); color: #121214; }
-    .slide-light .dict-filter-btn, .slide-light .chart-tab-btn { color: #52525B; background: rgba(0,0,0,.03); }
-    .slide-light .dict-filter-btn.active, .slide-light .chart-tab-btn.active { color: #121214; background: #FFE600; }
-    .slide-light .dict-badge { color: #121214; font-weight: 700; }
-    .slide-light .dict-grid { max-height: none; overflow: visible; }
-    .slide-light .bar-val, .slide-light .history-year { color: #121214; text-shadow: none; }
-    .slide-light .bar-track { background: rgba(0,0,0,.08); }
-    .slide-light .bar-fill { background: #FF007A; }
-    .slide-light .history-title { font-size: 22px; }
-    .slide-light .history-year { font-size: 18px; }
-    .slide-light .history-desc, .slide-light .insight-text { font-size: 13px; line-height: 1.55; }
-    .slide-light .insight-title { font-size: 15px; }
-    .slide-light .history-timeline-track::before { background: #00F0FF; }
     :focus-visible { outline: 3px solid #FF007A; outline-offset: 4px; }
     @media (max-width: 600px) {
       .slide { padding: 22px 18px; }
@@ -1772,11 +1824,11 @@
             </div>
           </div>
 
-          <!-- 3D Three.js Smiling Emoji with Gaze/Eye Tracking -->
+          <!-- 3D Three.js Dynamic Emoji Chain with Gaze/Eye Tracking -->
           <div class="hero-3d-wrapper">
             <canvas id="hero-canvas-3d"></canvas>
             <div class="hero-canvas-hint">
-              <span>👀 Cursor moves emoji gaze • Drag to rotate 360°</span>
+              <span>👀 Cursor tracks emoji gaze • 360° dynamic chain • Drag to rotate</span>
             </div>
           </div>
         </div>
@@ -1785,7 +1837,7 @@
       <!-- ================================================================
            SLIDE 2: EMOJI DICTIONARY (GEN Z VS GEN X PERSPECTIVE)
            ================================================================ -->
-      <section class="slide slide-light" data-index="2" data-title="Emoji Dictionary">
+      <section class="slide" data-index="2" data-title="Emoji Dictionary">
         <h2 class="slide-title">
           The Generational <span class="glow-pink">Emoji Dictionary</span>
         </h2>
@@ -1851,7 +1903,7 @@
       <!-- ================================================================
            SLIDE 4: POPULAR EMOJI ANALYTICS (STATISTICAL BAR CHARTS)
            ================================================================ -->
-      <section class="slide slide-light" data-index="4" data-title="Emoji Analytics">
+      <section class="slide" data-index="4" data-title="Emoji Analytics">
         <h2 class="slide-title">
           Popular Emoji <span class="glow-pink">Global Analytics</span>
         </h2>
@@ -2032,65 +2084,36 @@
       </section>
 
       <!-- ================================================================
-           SLIDE 7: EMOJI AVATAR BUILDER
+           SLIDE 7: EMOJI ROULETTE
            ================================================================ -->
-      <section class="slide" data-index="7" data-title="Avatar Builder">
+      <section class="slide" data-index="7" data-title="Emoji Roulette">
         <h2 class="slide-title">
-          Interactive <span class="glow-pink">Emoji Avatar Builder</span>
+          Interactive <span class="glow-pink">Emoji Roulette</span>
         </h2>
         <p class="slide-desc">
-          Craft your custom generational avatar! Select a base emoji face, layer decorative accessories like hats, glasses, and glowing ambient auras.
+          Spin the generational roulette wheel to uncover hidden crypto-dialects, workplace landmines, and post-ironic subtexts across cohorts!
         </p>
 
-        <div class="avatar-builder-layout">
-          <!-- Canvas / Visual Composite Stage -->
-          <div class="avatar-stage-box">
-            <div class="avatar-canvas-preview" id="avatar-preview-canvas">
-              <div class="avatar-layer base" id="avatar-layer-base">😀</div>
-              <div class="avatar-layer hat" id="avatar-layer-hat"></div>
-              <div class="avatar-layer glasses" id="avatar-layer-glasses"></div>
-              <div class="avatar-layer accessory" id="avatar-layer-accessory"></div>
+        <div class="roulette-layout">
+          <!-- Wheel Stage -->
+          <div class="roulette-stage-box">
+            <div class="roulette-wheel-wrapper">
+              <div class="roulette-pointer"></div>
+              <canvas id="roulette-wheel-canvas" width="300" height="300"></canvas>
             </div>
 
-            <div style="font-size:14px; font-weight:700; color:var(--text-white);" id="avatar-title-label">
-              "The Joyful Pioneer"
-            </div>
+            <button class="nav-btn primary roulette-spin-btn" id="roulette-spin-btn" onclick="spinEmojiRoulette()">
+              <span>🎰</span> Spin Roulette
+            </button>
 
-            <div style="display:flex; gap:10px;">
-              <button class="nav-btn primary" onclick="randomizeAvatar()" style="font-size:11px; padding:6px 14px;">
-                🎲 Randomize
-              </button>
-              <button class="nav-btn" onclick="copyAvatarCode()" style="font-size:11px; padding:6px 14px;">
-                📋 Copy Glyph Stack
-              </button>
+            <div class="roulette-status-text" id="roulette-status-text">
+              Click "Spin Roulette" to test your generational luck!
             </div>
           </div>
 
-          <!-- Controls Customizer -->
-          <div class="avatar-controls-box">
-            <!-- Base Face -->
-            <div class="avatar-picker-section">
-              <div class="avatar-picker-title">1. Base Face Glyph</div>
-              <div class="avatar-options-grid" id="avatar-base-options"></div>
-            </div>
-
-            <!-- Headwear -->
-            <div class="avatar-picker-section">
-              <div class="avatar-picker-title">2. Headwear / Hat</div>
-              <div class="avatar-options-grid" id="avatar-hat-options"></div>
-            </div>
-
-            <!-- Eyewear -->
-            <div class="avatar-picker-section">
-              <div class="avatar-picker-title">3. Eyewear / Glasses</div>
-              <div class="avatar-options-grid" id="avatar-glasses-options"></div>
-            </div>
-
-            <!-- Accessory -->
-            <div class="avatar-picker-section">
-              <div class="avatar-picker-title">4. Decorative Accent</div>
-              <div class="avatar-options-grid" id="avatar-accessory-options"></div>
-            </div>
+          <!-- Result & Cultural Semiotics Display -->
+          <div class="roulette-result-card" id="roulette-result-card">
+            <!-- Dynamic result rendered by JavaScript -->
           </div>
         </div>
       </section>
@@ -2138,7 +2161,7 @@
       <!-- ================================================================
            SLIDE 9: HISTORICAL EVOLUTION (DOCOMO TO UNICODE)
            ================================================================ -->
-      <section class="slide slide-light" data-index="9" data-title="Historical Evolution">
+      <section class="slide" data-index="9" data-title="Historical Evolution">
         <h2 class="slide-title">
           From NTT DoCoMo to <span class="glow-pink">Universal Standard</span>
         </h2>
@@ -2258,7 +2281,7 @@
                 🎮 Play Arcade Game Again
               </button>
               <button class="nav-btn" onclick="goToSlide(7)">
-                🎨 Build Another Avatar
+                🎰 Spin Emoji Roulette
               </button>
             </div>
           </div>
@@ -2391,7 +2414,7 @@ window.PythonBridge = {
     const brandBadge = document.getElementById('brand-badge');
 
     // Dynamic brand badges for 11 slides
-    const slideBadges = ['🎭', '📖', '🧩', '📊', '🟩', '🌍', '🎨', '🎯', '⏳', '🕹️', '💖'];
+    const slideBadges = ['🎭', '📖', '🧩', '📊', '🟩', '🌍', '🎰', '🎯', '⏳', '🕹️', '💖'];
 
     // Generate Nav Dots with Tooltips
     slides.forEach((slide, idx) => {
@@ -2433,6 +2456,7 @@ window.PythonBridge = {
 
       // Trigger specific slide initializations upon entry
       if (currentSlide === 4) renderBarChart('global');
+      if (currentSlide === 7) { if (!rouletteCanvas) initRouletteGame(); drawRouletteWheel(rouletteAngle); }
       if (currentSlide === 11) initThankYouFloatingElements();
     }
 
@@ -2740,9 +2764,11 @@ window.PythonBridge = {
       bgLight.color.lerp(targetColor, 0.8);
     }
 
-    // SLIDE 1: 3D SMILING EMOJI WITH MOUSE TRACKING PUPILS / GAZE
+    // SLIDE 1: DYNAMIC 3D EMOJI CHAIN / HELIX WITH REAL-TIME EYE/GAZE TRACKING & 360° SPIN
     let heroScene, heroCamera, heroRenderer, heroEmojiGroup;
-    let pupilLeft, pupilRight, eyeLeftGroup, eyeRightGroup;
+    let heroChainNodes = [];
+    let heroAllPupils = [];
+    let heroAllEyes = [];
     let isDraggingHero = false, prevMouseX = 0, prevMouseY = 0;
     let targetGazeX = 0, targetGazeY = 0;
     let currentGazeX = 0, currentGazeY = 0;
@@ -2754,99 +2780,234 @@ window.PythonBridge = {
 
       heroScene = new THREE.Scene();
       heroCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-      heroCamera.position.z = 5.2;
+      heroCamera.position.set(0, 0, 5.5);
 
       heroRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
       heroRenderer.setSize(container.clientWidth, container.clientHeight);
       heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
       // Lighting
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
       heroScene.add(ambientLight);
 
       const mainLight = new THREE.DirectionalLight(0xfff5ea, 1.8);
-      mainLight.position.set(4, 6, 5);
+      mainLight.position.set(5, 7, 6);
       heroScene.add(mainLight);
 
-      const rimLight = new THREE.DirectionalLight(0x00F0FF, 1.2);
-      rimLight.position.set(-5, -3, 3);
-      heroScene.add(rimLight);
+      const cyanRim = new THREE.DirectionalLight(0x00F0FF, 1.4);
+      cyanRim.position.set(-6, -3, 4);
+      heroScene.add(cyanRim);
+
+      const pinkRim = new THREE.DirectionalLight(0xFF007A, 1.2);
+      pinkRim.position.set(4, -5, -3);
+      heroScene.add(pinkRim);
 
       heroEmojiGroup = new THREE.Group();
       heroScene.add(heroEmojiGroup);
 
-      // 1. Emoji Head: Rich Glossy Yellow Sphere
-      const headGeo = new THREE.SphereGeometry(1.5, 64, 64);
-      const headMat = new THREE.MeshStandardMaterial({
+      heroChainNodes = [];
+      heroAllPupils = [];
+      heroAllEyes = [];
+
+      // EMOJI CHAIN / HELIX PARAMETERS
+      const nodeCount = 10;
+      const helixRadius = 1.35;
+      const helixHeight = 2.8;
+      const totalTurns = 2.0; // 2 complete helical spiral turns
+
+      // Materials for shared elements
+      const yellowHeadMat = new THREE.MeshStandardMaterial({
         color: 0xffcb2b,
-        metalness: 0.12,
+        metalness: 0.15,
         roughness: 0.22,
         emissive: 0xffa000,
         emissiveIntensity: 0.08
       });
-      const headMesh = new THREE.Mesh(headGeo, headMat);
-      heroEmojiGroup.add(headMesh);
-
-      // 2. Eyes & Pupils with Gaze Tracking
-      const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 });
+      const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.18 });
       const pupilMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.1 });
       const glintMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const cheekMat = new THREE.MeshBasicMaterial({ color: 0xff6b81, transparent: true, opacity: 0.5 });
+      const mouthMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.3 });
+      const skullMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.35, metalness: 0.05 });
+      const heartMat = new THREE.MeshStandardMaterial({ color: 0xff0055, roughness: 0.2, emissive: 0x660022 });
+      const shadesMat = new THREE.MeshStandardMaterial({ color: 0x09090b, roughness: 0.1, metalness: 0.8 });
 
-      // Left Eye
-      eyeLeftGroup = new THREE.Group();
-      eyeLeftGroup.position.set(-0.46, 0.38, 1.34);
-      const leftSclera = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), eyeWhiteMat);
-      eyeLeftGroup.add(leftSclera);
+      // Generate helical spine curve for glowing connecting chain
+      const curvePoints = [];
+      const samplePoints = 40;
+      for (let s = 0; s <= samplePoints; s++) {
+        const t = s / samplePoints;
+        const angle = t * Math.PI * 2 * totalTurns;
+        const x = Math.cos(angle) * helixRadius;
+        const y = (t - 0.5) * helixHeight;
+        const z = Math.sin(angle) * helixRadius;
+        curvePoints.push(new THREE.Vector3(x, y, z));
+      }
+      const helixCurve = new THREE.CatmullRomCurve3(curvePoints);
+      const chainTubeGeo = new THREE.TubeGeometry(helixCurve, 80, 0.038, 8, false);
+      const chainTubeMat = new THREE.MeshStandardMaterial({
+        color: 0x00F0FF,
+        emissive: 0x004455,
+        metalness: 0.8,
+        roughness: 0.25,
+        transparent: true,
+        opacity: 0.75
+      });
+      const chainTubeMesh = new THREE.Mesh(chainTubeGeo, chainTubeMat);
+      heroEmojiGroup.add(chainTubeMesh);
 
-      pupilLeft = new THREE.Mesh(new THREE.SphereGeometry(0.14, 32, 32), pupilMat);
-      pupilLeft.position.set(0, 0, 0.2);
-      const glintLeft = new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 16), glintMat);
-      glintLeft.position.set(0.04, 0.04, 0.12);
-      pupilLeft.add(glintLeft);
-      eyeLeftGroup.add(pupilLeft);
-      heroEmojiGroup.add(eyeLeftGroup);
+      // Distinct facial types across the chain
+      const emojiTypes = [
+        'smile', 'shades', 'heartEyes', 'laugh', 'wink',
+        'skull', 'pleased', 'starEyes', 'cheeky', 'angel'
+      ];
 
-      // Right Eye
-      eyeRightGroup = new THREE.Group();
-      eyeRightGroup.position.set(0.46, 0.38, 1.34);
-      const rightSclera = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), eyeWhiteMat);
-      eyeRightGroup.add(rightSclera);
+      for (let i = 0; i < nodeCount; i++) {
+        const t = i / (nodeCount - 1);
+        const angle = t * Math.PI * 2 * totalTurns;
+        const posX = Math.cos(angle) * helixRadius;
+        const posY = (t - 0.5) * helixHeight;
+        const posZ = Math.sin(angle) * helixRadius;
 
-      pupilRight = new THREE.Mesh(new THREE.SphereGeometry(0.14, 32, 32), pupilMat);
-      pupilRight.position.set(0, 0, 0.2);
-      const glintRight = new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 16), glintMat);
-      glintRight.position.set(0.04, 0.04, 0.12);
-      pupilRight.add(glintRight);
-      eyeRightGroup.add(pupilRight);
-      heroEmojiGroup.add(eyeRightGroup);
+        const emojiNode = new THREE.Group();
+        emojiNode.position.set(posX, posY, posZ);
+        emojiNode.scale.set(0.38, 0.38, 0.38);
 
-      // 3. Cute Rosy Cheeks
-      const cheekMat = new THREE.MeshBasicMaterial({ color: 0xff6b81, transparent: true, opacity: 0.45 });
-      const leftCheek = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 24), cheekMat);
-      leftCheek.position.set(-0.82, -0.05, 1.25);
-      leftCheek.scale.set(1.1, 0.7, 0.3);
-      heroEmojiGroup.add(leftCheek);
+        // Connecting ring/collar around chain
+        const collar = new THREE.Mesh(
+          new THREE.TorusGeometry(0.55, 0.05, 12, 24),
+          new THREE.MeshStandardMaterial({ color: 0xFFE600, metalness: 0.9, roughness: 0.15 })
+        );
+        collar.rotation.x = Math.PI / 2;
+        emojiNode.add(collar);
 
-      const rightCheek = new THREE.Mesh(new THREE.SphereGeometry(0.22, 24, 24), cheekMat);
-      rightCheek.position.set(0.82, -0.05, 1.25);
-      rightCheek.scale.set(1.1, 0.7, 0.3);
-      heroEmojiGroup.add(rightCheek);
+        const type = emojiTypes[i % emojiTypes.length];
+        const isSkull = (type === 'skull');
+        const headGeo = new THREE.SphereGeometry(0.5, 32, 32);
+        const headMesh = new THREE.Mesh(headGeo, isSkull ? skullMat : yellowHeadMat);
+        emojiNode.add(headMesh);
 
-      // 4. Cheerful 3D Smile (Curved Torus Arc)
-      const smileGeo = new THREE.TorusGeometry(0.65, 0.11, 16, 64, Math.PI * 0.88);
-      const smileMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.3 });
-      const smileMesh = new THREE.Mesh(smileGeo, smileMat);
-      smileMesh.position.set(0, -0.16, 1.32);
-      smileMesh.rotation.z = Math.PI * 1.06;
-      heroEmojiGroup.add(smileMesh);
+        // Build facial features based on emoji type
+        if (type === 'shades') {
+          // Sunglasses
+          const glassesGroup = new THREE.Group();
+          glassesGroup.position.set(0, 0.1, 0.42);
+          const lensGeo = new THREE.BoxGeometry(0.24, 0.16, 0.06);
+          const leftLens = new THREE.Mesh(lensGeo, shadesMat);
+          leftLens.position.set(-0.16, 0, 0);
+          const rightLens = new THREE.Mesh(lensGeo, shadesMat);
+          rightLens.position.set(0.16, 0, 0);
+          const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.04, 0.06), shadesMat);
+          glassesGroup.add(leftLens, rightLens, bridge);
+          emojiNode.add(glassesGroup);
 
-      // Mouse Gaze Tracking Listener across screen
+          // Smile
+          const smile = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.04, 10, 24, Math.PI * 0.8), mouthMat);
+          smile.position.set(0, -0.16, 0.44);
+          smile.rotation.z = Math.PI * 1.1;
+          emojiNode.add(smile);
+        } else if (type === 'heartEyes') {
+          // Heart eyes
+          const leftHeart = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), heartMat);
+          leftHeart.position.set(-0.17, 0.12, 0.44);
+          leftHeart.scale.set(1, 1.2, 0.6);
+          const rightHeart = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), heartMat);
+          rightHeart.position.set(0.17, 0.12, 0.44);
+          rightHeart.scale.set(1, 1.2, 0.6);
+          emojiNode.add(leftHeart, rightHeart);
+
+          const smile = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.04, 10, 24, Math.PI * 0.85), mouthMat);
+          smile.position.set(0, -0.16, 0.44);
+          smile.rotation.z = Math.PI * 1.08;
+          emojiNode.add(smile);
+        } else if (type === 'skull') {
+          // Dark hollow eye sockets
+          const eyeSocketGeo = new THREE.SphereGeometry(0.12, 16, 16);
+          const leftSocket = new THREE.Mesh(eyeSocketGeo, pupilMat);
+          leftSocket.position.set(-0.17, 0.1, 0.42);
+          const rightSocket = new THREE.Mesh(eyeSocketGeo, pupilMat);
+          rightSocket.position.set(0.17, 0.1, 0.42);
+          emojiNode.add(leftSocket, rightSocket);
+
+          // Teeth grin
+          const teeth = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.08, 0.08), mouthMat);
+          teeth.position.set(0, -0.18, 0.44);
+          emojiNode.add(teeth);
+        } else {
+          // Expressive eyes with pupils and gaze tracking
+          const eyeGroupLeft = new THREE.Group();
+          eyeGroupLeft.position.set(-0.17, 0.12, 0.44);
+          const leftSclera = new THREE.Mesh(new THREE.SphereGeometry(0.11, 20, 20), eyeWhiteMat);
+          eyeGroupLeft.add(leftSclera);
+
+          const pLeft = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 16), pupilMat);
+          pLeft.position.set(0, 0, 0.08);
+          const gLeft = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 8), glintMat);
+          gLeft.position.set(0.015, 0.015, 0.05);
+          pLeft.add(gLeft);
+          eyeGroupLeft.add(pLeft);
+          emojiNode.add(eyeGroupLeft);
+          heroAllEyes.push(eyeGroupLeft);
+          heroAllPupils.push(pLeft);
+
+          if (type === 'wink') {
+            // Right eye is a cute winking arc
+            const winkArc = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.025, 8, 16, Math.PI), mouthMat);
+            winkArc.position.set(0.17, 0.12, 0.46);
+            winkArc.rotation.z = Math.PI;
+            emojiNode.add(winkArc);
+          } else {
+            const eyeGroupRight = new THREE.Group();
+            eyeGroupRight.position.set(0.17, 0.12, 0.44);
+            const rightSclera = new THREE.Mesh(new THREE.SphereGeometry(0.11, 20, 20), eyeWhiteMat);
+            eyeGroupRight.add(rightSclera);
+
+            const pRight = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 16), pupilMat);
+            pRight.position.set(0, 0, 0.08);
+            const gRight = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 8), glintMat);
+            gRight.position.set(0.015, 0.015, 0.05);
+            pRight.add(gRight);
+            eyeGroupRight.add(pRight);
+            emojiNode.add(eyeGroupRight);
+            heroAllEyes.push(eyeGroupRight);
+            heroAllPupils.push(pRight);
+          }
+
+          // Cheerful Smile
+          const smile = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.038, 10, 24, Math.PI * 0.85), mouthMat);
+          smile.position.set(0, -0.15, 0.44);
+          smile.rotation.z = Math.PI * 1.08;
+          emojiNode.add(smile);
+
+          // Cheeks
+          const leftCheek = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), cheekMat);
+          leftCheek.position.set(-0.28, -0.04, 0.4);
+          leftCheek.scale.set(1.2, 0.7, 0.4);
+          const rightCheek = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), cheekMat);
+          rightCheek.position.set(0.28, -0.04, 0.4);
+          rightCheek.scale.set(1.2, 0.7, 0.4);
+          emojiNode.add(leftCheek, rightCheek);
+        }
+
+        // Orient node outward along helix normal
+        emojiNode.lookAt(posX * 2, posY, posZ * 2);
+
+        heroEmojiGroup.add(emojiNode);
+        heroChainNodes.push({
+          mesh: emojiNode,
+          baseAngle: angle,
+          baseY: posY,
+          index: i
+        });
+      }
+
+      // Mouse Gaze Tracking Listener across entire screen
       window.addEventListener('mousemove', (e) => {
         targetGazeX = (e.clientX / window.innerWidth) * 2 - 1;
         targetGazeY = -(e.clientY / window.innerHeight) * 2 + 1;
       });
 
-      // Mouse drag rotation controls
+      // Mouse Drag Rotation
       canvas.addEventListener('mousedown', (e) => {
         isDraggingHero = true;
         prevMouseX = e.clientX;
@@ -2861,7 +3022,7 @@ window.PythonBridge = {
         prevMouseY = e.clientY;
       });
 
-      // Touch controls for mobile
+      // Touch Drag Rotation
       canvas.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
           isDraggingHero = true;
@@ -2878,34 +3039,42 @@ window.PythonBridge = {
         prevMouseY = e.touches[0].clientY;
       });
 
-      let clock = new THREE.Clock();
+      const clock = new THREE.Clock();
+      const cycleDuration = 4.0; // Smooth 360-degree rotation completed every 4.0 seconds (3-5s requirement)
+      const rotationSpeed = (Math.PI * 2) / cycleDuration;
 
       function animateHero() {
         requestAnimationFrame(animateHero);
         const delta = clock.getDelta();
         const elapsedTime = clock.getElapsedTime();
 
-        // 360-degree rotation around Y axis continuously
+        // 360-degree smooth continuous rotation over full 4-second cycle
         if (!isDraggingHero) {
-          heroEmojiGroup.rotation.y += 0.008;
-          heroEmojiGroup.position.y = Math.sin(elapsedTime * 1.8) * 0.08;
+          heroEmojiGroup.rotation.y += rotationSpeed * delta;
+          heroEmojiGroup.position.y = Math.sin(elapsedTime * 1.6) * 0.08;
+          heroEmojiGroup.rotation.z = Math.sin(elapsedTime * 0.9) * 0.04;
         }
 
-        // Smooth Eye Pupil Gaze Tracking
+        // Smooth gaze tracking interpolation
         currentGazeX += (targetGazeX - currentGazeX) * 0.08;
         currentGazeY += (targetGazeY - currentGazeY) * 0.08;
 
-        const maxEyeShift = 0.1;
-        pupilLeft.position.x = currentGazeX * maxEyeShift;
-        pupilLeft.position.y = currentGazeY * maxEyeShift;
-        pupilRight.position.x = currentGazeX * maxEyeShift;
-        pupilRight.position.y = currentGazeY * maxEyeShift;
+        const maxEyeShift = 0.035;
+        heroAllPupils.forEach(pupil => {
+          pupil.position.x = currentGazeX * maxEyeShift;
+          pupil.position.y = currentGazeY * maxEyeShift;
+        });
 
-        // Slight eye socket orientation tilt
-        eyeLeftGroup.rotation.y = currentGazeX * 0.25;
-        eyeLeftGroup.rotation.x = -currentGazeY * 0.25;
-        eyeRightGroup.rotation.y = currentGazeX * 0.25;
-        eyeRightGroup.rotation.x = -currentGazeY * 0.25;
+        heroAllEyes.forEach(eyeGroup => {
+          eyeGroup.rotation.y = currentGazeX * 0.28;
+          eyeGroup.rotation.x = -currentGazeY * 0.28;
+        });
+
+        // Individual emoji local rotation / pulse along the chain
+        heroChainNodes.forEach((nodeObj, idx) => {
+          nodeObj.mesh.position.y = nodeObj.baseY + Math.sin(elapsedTime * 2.5 + idx * 0.6) * 0.05;
+          nodeObj.mesh.rotation.z = Math.sin(elapsedTime * 2.0 + idx) * 0.15;
+        });
 
         heroRenderer.render(heroScene, heroCamera);
       }
@@ -3556,80 +3725,387 @@ window.PythonBridge = {
     }
 
     /* ==========================================================================
-       I. SLIDE 7: EMOJI AVATAR BUILDER
+       I. SLIDE 7: EMOJI ROULETTE
        ========================================================================== */
-    const avatarAssets = {
-      bases: ['😀', '😎', '😉', '😆', '😐', '🤯', '💀', '👽', '🐱'],
-      hats: ['', '🥳', '🎩', '👑', '🤠', '🧢', '🎓', '🎧'],
-      glasses: ['', '🕶️', '👓', '🧐', '🥽', '⭐'],
-      accessories: ['', '✨', '🔥', '❤️', '💧', '🥸']
-    };
+    const rouletteDatabase = [
+      {
+        glyph: '💀',
+        name: 'Skull / Dead',
+        category: 'Workplace Hazard',
+        cohort: 'Gen Z Sovereign',
+        genx: 'Literal mortality, poison danger, or gothic death threat.',
+        genz: '"I\'m dying of laughter" — replaced 😂 as supreme token of hilarity.',
+        lore: 'A textbook example of the Semiotic Inflation Law: when 😂 became the standard emoji of corporate Slack channels, Gen Z migrated to morbid tokens (💀, 😭, 🪑) to express laughter with subversive edge.',
+        tip: 'Never send 💀 to HR or older managers when replying to serious company announcements.'
+      },
+      {
+        glyph: '👍',
+        name: 'Thumbs Up',
+        category: 'Workplace Landmine',
+        cohort: 'Gen X Pragmatic',
+        genx: 'Efficient, neutral confirmation: "Got it, confirmed, good job."',
+        genz: 'Passive-aggressive dismissal: "Whatever, conversation over, I dislike you."',
+        lore: 'In 2023, the Canadian King\'s Bench ruled 👍 created an enforceable $82,000 CAD grain contract. Courts worldwide now recognize emojis as binding instruments of legal intent.',
+        tip: 'Use "Sounds great!" or "Thank you!" when communicating with younger colleagues to prevent perceived hostility.'
+      },
+      {
+        glyph: '🙂',
+        name: 'Slightly Smiling Face',
+        category: 'Passive-Aggression',
+        cohort: 'Polarized Dissonance',
+        genx: 'Polite, calm friendliness and agreeable acknowledgment.',
+        genz: 'Unhinged existential rage, masked panic: "I am screaming inside while smiling."',
+        lore: 'The lack of expressive crinkles around the eyes gives 🙂 an eerie, detached stare, making it the digital equivalent of smiling through clenched teeth in customer service.',
+        tip: 'Use 😊 or 😄 for genuine warmth; reserving 🙂 strictly for ironic coping.'
+      },
+      {
+        glyph: '🧢',
+        name: 'Billed Cap (Cap / No Cap)',
+        category: 'Youth Inversion',
+        cohort: 'Gen Z / TikTok',
+        genx: 'A baseball hat, outdoor sun protection, or athletic gear.',
+        genz: '"Cap" = Lie / Falsehood. Texting 🧢 calls out blatant dishonesty.',
+        lore: 'Originating in African American Vernacular English (AAVE) in early 1900s, popularized into global youth culture via hip-hop and Twitch streamers.',
+        tip: 'Replying with 🧢 under someone\'s brag or claim publicly accuses them of fabricating the story.'
+      },
+      {
+        glyph: '💅',
+        name: 'Nail Polish',
+        category: 'Sass & Mic Drop',
+        cohort: 'Gen Z & Millennial',
+        genx: 'Cosmetic salon appointment, grooming, or luxury self-care.',
+        genz: 'Effortless superiority, calm shade, mic drop: "...and that\'s on period."',
+        lore: 'Signifies dropping an indisputable, devastating fact and walking away unbothered while blowing on freshly painted nails.',
+        tip: 'Great for celebrating peer triumphs; avoid using in formal audit reports or defect reviews.'
+      },
+      {
+        glyph: '🫠',
+        name: 'Melting Face',
+        category: 'Coping Mechanism',
+        cohort: 'Millennial / Gen Z',
+        genx: 'Extreme heat, high summer temperatures, physical exhaustion.',
+        genz: 'Smiling through existential dread, corporate burnout, or unbearable awkwardness.',
+        lore: 'Released in Unicode 14.0 (2021), it rapidly surged to top cultural usage as the universal icon for navigating chaotic modern times with forced optimism.',
+        tip: 'The gold standard response to a Friday 4:55 PM urgent meeting invite from executive leadership.'
+      },
+      {
+        glyph: '🤡',
+        name: 'Clown Face',
+        category: 'Self-Deprecation',
+        cohort: 'Gen Z / Social Media',
+        genx: 'Circus performer, children\'s birthday party entertainer, horror villain.',
+        genz: 'Foolishness, getting clowned, making naive choices or being played.',
+        lore: '"Putting on the clown makeup" meme represents the incremental steps of trusting someone or a company that repeatedly lets you down.',
+        tip: 'Self-tagging with 🤡 displays relatable humility; sending it to someone else is a direct roast.'
+      },
+      {
+        glyph: '☕',
+        name: 'Hot Beverage / Tea',
+        category: 'Gossip & Spectacle',
+        cohort: 'Cross-Generational',
+        genx: 'Morning caffeine ritual, breakfast beverage, casual coffee chat.',
+        genz: '"Spilling tea" (juicy drama) or sipping silently while chaos unfolds.',
+        lore: 'Rooted in drag ballroom culture ("T" for Truth), "tea" evolved into the universal internet metaphor for confidential gossip and insider information.',
+        tip: 'Dropping ☕ in Slack during office restructuring indicates you are eagerly monitoring the rumors.'
+      },
+      {
+        glyph: '🪑',
+        name: 'Wooden Chair',
+        category: 'Absurdist Crypto-Dialect',
+        cohort: 'Gen Z Absurdism',
+        genx: 'Household furniture, office ergonomic seating, dining chair.',
+        genz: 'Uncontrollable laughter (viral TikTok replacement for 💀 and 😂).',
+        lore: 'In 2021, TikTok creators coordinated to flood comments with 🪑 whenever something was funny to deliberately confuse older algorithm viewers and outsiders.',
+        tip: 'Illustrates how quickly youth cohorts invent arbitrary signifiers purely to gatekeep digital spaces.'
+      },
+      {
+        glyph: '🥺',
+        name: 'Pleading Face',
+        category: 'Vulnerability & Simp',
+        cohort: 'Gen Z & Millennial',
+        genx: 'Sad puppy eyes, feeling sorry, begging for an apology.',
+        genz: 'Playful begging, cute manipulation, soft adoration: "is for me? 👉👈".',
+        lore: 'Peaked during pandemic lockdowns as an expression of digital affection and emotional tenderness among youth communities.',
+        tip: 'Creates friendly empathy in casual chats; avoid when presenting financial quarterly summaries.'
+      },
+      {
+        glyph: '✨',
+        name: 'Sparkles',
+        category: 'Mock Aesthetic',
+        cohort: 'Gen Z Ironic',
+        genx: 'Magic, fireworks, spotless clean surfaces, celebratory joy.',
+        genz: 'Sarcastic emphasis wrapping dreadful words (e.g., ✨ anxiety ✨, ✨ trauma ✨).',
+        lore: 'Subverts marketing sparkle aesthetics to ironically elevate mundane misery or corporate jargon into mock-glamour.',
+        tip: 'Wrapping corporate buzzwords in sparkles completely destabilizes their seriousness.'
+      },
+      {
+        glyph: '🔥',
+        name: 'Fire / Flame',
+        category: 'Universal Praise',
+        cohort: 'Universal Consensus',
+        genx: 'Campfire, spicy food, fire hazard, hot weather.',
+        genz: '"Lit", peak performance, exceptional style, fire track or fit.',
+        lore: 'One of the rare glyphs achieving authentic cross-generational semantic parity without ironic corruption.',
+        tip: 'Universally safe and positive across both executive boardrooms and youth group chats.'
+      }
+    ];
 
-    let avatarState = {
-      base: '😀',
-      hat: '',
-      glasses: '',
-      accessory: ''
-    };
+    let rouletteCanvas, rouletteCtx;
+    let rouletteAngle = 0;
+    let isRouletteSpinning = false;
+    let rouletteTotalSpins = 0;
+    let rouletteHistory = [];
 
+    function initRouletteGame() {
+      rouletteCanvas = document.getElementById('roulette-wheel-canvas');
+      if (!rouletteCanvas) return;
+      rouletteCtx = rouletteCanvas.getContext('2d');
+      drawRouletteWheel(rouletteAngle);
+      renderRouletteInitialState();
+    }
+
+    // Keep backwards compatibility alias
     function initAvatarBuilder() {
-      // Build options grid for each category
-      const renderOptions = (catKey, containerId) => {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
-        avatarAssets[catKey].forEach(item => {
-          const btn = document.createElement('button');
-          btn.className = `avatar-option-btn ${avatarState[catKey.slice(0, -1)] === item ? 'active' : ''}`;
-          btn.textContent = item === '' ? '🚫' : item;
-          btn.onclick = () => {
-            playSynthesizedSound('click');
-            avatarState[catKey.slice(0, -1)] = item;
-            updateAvatarPreview();
-            container.querySelectorAll('.avatar-option-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-          };
-          container.appendChild(btn);
-        });
-      };
-
-      renderOptions('bases', 'avatar-base-options');
-      renderOptions('hats', 'avatar-hat-options');
-      renderOptions('glasses', 'avatar-glasses-options');
-      renderOptions('accessories', 'avatar-accessory-options');
-      updateAvatarPreview();
+      initRouletteGame();
     }
 
-    function updateAvatarPreview() {
-      document.getElementById('avatar-layer-base').textContent = avatarState.base;
-      document.getElementById('avatar-layer-hat').textContent = avatarState.hat;
-      document.getElementById('avatar-layer-glasses').textContent = avatarState.glasses;
-      document.getElementById('avatar-layer-accessory').textContent = avatarState.accessory;
+    function drawRouletteWheel(angle) {
+      if (!rouletteCtx || !rouletteCanvas) return;
+      const w = rouletteCanvas.width;
+      const h = rouletteCanvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const radius = cx - 12;
+      const count = rouletteDatabase.length;
+      const slice = (Math.PI * 2) / count;
 
-      const titles = [
-        "The Neon Maverick", "The Cyber Scholar", "The Post-Ironic Monarch",
-        "The Chill Absurdist", "The Digital Diplomat", "The High-Tech Vibe Master"
-      ];
-      document.getElementById('avatar-title-label').textContent = `"${titles[Math.floor(Math.random() * titles.length)]}"`;
+      rouletteCtx.clearRect(0, 0, w, h);
+
+      // Outer glow circle
+      rouletteCtx.save();
+      rouletteCtx.translate(cx, cy);
+
+      // Draw segments
+      for (let i = 0; i < count; i++) {
+        const segStart = angle + i * slice;
+        const segEnd = segStart + slice;
+
+        rouletteCtx.beginPath();
+        rouletteCtx.moveTo(0, 0);
+        rouletteCtx.arc(0, 0, radius, segStart, segEnd);
+        rouletteCtx.closePath();
+
+        // Alternating futuristic segment fills
+        if (i % 3 === 0) {
+          rouletteCtx.fillStyle = 'rgba(28, 34, 54, 0.95)';
+        } else if (i % 3 === 1) {
+          rouletteCtx.fillStyle = 'rgba(18, 22, 34, 0.95)';
+        } else {
+          rouletteCtx.fillStyle = 'rgba(12, 16, 26, 0.95)';
+        }
+        rouletteCtx.fill();
+
+        // Segment divider lines
+        rouletteCtx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
+        rouletteCtx.lineWidth = 1.5;
+        rouletteCtx.stroke();
+
+        // Segment Glyph
+        rouletteCtx.save();
+        rouletteCtx.rotate(segStart + slice / 2);
+        rouletteCtx.textAlign = 'center';
+        rouletteCtx.textBaseline = 'middle';
+        rouletteCtx.font = '24px sans-serif';
+        rouletteCtx.fillText(rouletteDatabase[i].glyph, radius * 0.72, 0);
+        rouletteCtx.restore();
+      }
+
+      // Outer Neon Rim
+      rouletteCtx.beginPath();
+      rouletteCtx.arc(0, 0, radius, 0, Math.PI * 2);
+      rouletteCtx.strokeStyle = '#00F0FF';
+      rouletteCtx.lineWidth = 4;
+      rouletteCtx.shadowColor = '#00F0FF';
+      rouletteCtx.shadowBlur = 14;
+      rouletteCtx.stroke();
+      rouletteCtx.shadowBlur = 0;
+
+      // Decorative Perimeter LED Dots
+      const dotCount = 24;
+      for (let d = 0; d < dotCount; d++) {
+        const dAngle = angle + (d / dotCount) * Math.PI * 2;
+        const dx = Math.cos(dAngle) * (radius - 1);
+        const dy = Math.sin(dAngle) * (radius - 1);
+        rouletteCtx.beginPath();
+        rouletteCtx.arc(dx, dy, 2.5, 0, Math.PI * 2);
+        rouletteCtx.fillStyle = (d % 2 === 0) ? '#FFE600' : '#FF007A';
+        rouletteCtx.fill();
+      }
+
+      // Center Hub
+      rouletteCtx.beginPath();
+      rouletteCtx.arc(0, 0, 36, 0, Math.PI * 2);
+      const hubGrad = rouletteCtx.createRadialGradient(0, 0, 2, 0, 0, 36);
+      hubGrad.addColorStop(0, '#1e293b');
+      hubGrad.addColorStop(1, '#090d16');
+      rouletteCtx.fillStyle = hubGrad;
+      rouletteCtx.fill();
+      rouletteCtx.strokeStyle = '#FF007A';
+      rouletteCtx.lineWidth = 3;
+      rouletteCtx.shadowColor = '#FF007A';
+      rouletteCtx.shadowBlur = 12;
+      rouletteCtx.stroke();
+      rouletteCtx.shadowBlur = 0;
+
+      // Center icon
+      rouletteCtx.textAlign = 'center';
+      rouletteCtx.textBaseline = 'middle';
+      rouletteCtx.font = '22px sans-serif';
+      rouletteCtx.fillText('🎯', 0, 1);
+
+      rouletteCtx.restore();
     }
 
-    function randomizeAvatar() {
-      playSynthesizedSound('chime');
-      avatarState.base = avatarAssets.bases[Math.floor(Math.random() * avatarAssets.bases.length)];
-      avatarState.hat = avatarAssets.hats[Math.floor(Math.random() * avatarAssets.hats.length)];
-      avatarState.glasses = avatarAssets.glasses[Math.floor(Math.random() * avatarAssets.glasses.length)];
-      avatarState.accessory = avatarAssets.accessories[Math.floor(Math.random() * avatarAssets.accessories.length)];
-      updateAvatarPreview();
-      initAvatarBuilder(); // Refresh active button states
+    function renderRouletteInitialState() {
+      const card = document.getElementById('roulette-result-card');
+      if (!card) return;
+      card.classList.remove('revealed');
+      card.innerHTML = `
+        <div style="text-align:center; padding:20px;">
+          <div style="font-size:54px; margin-bottom:12px; animation: gentle-pulse 3s infinite ease-in-out;">🎰</div>
+          <div style="font-size:22px; font-weight:800; color:var(--text-white); margin-bottom:8px;">
+            The Generational Roulette
+          </div>
+          <p style="font-size:13px; color:var(--text-muted); line-height:1.55; max-width:440px; margin:0 auto 16px auto;">
+            Spin the wheel to decode hidden meanings, tonal dissonance, and workplace hazards across cohorts. Each spin reveals how Boomers, Gen X, Millennials, and Gen Z perceive the exact same glyph!
+          </p>
+          <div style="display:inline-flex; gap:8px;">
+            <span class="dict-badge badge-genx">12 Cultural Emojis</span>
+            <span class="dict-badge badge-genz">Instant Decoder</span>
+          </div>
+        </div>
+      `;
     }
 
-    function copyAvatarCode() {
-      playSynthesizedSound('click');
-      const combo = `${avatarState.hat} ${avatarState.glasses} ${avatarState.base} ${avatarState.accessory}`.trim();
-      navigator.clipboard.writeText(combo).then(() => {
-        alert(`Avatar Glyphs Copied to Clipboard:\n\n${combo}`);
-      }).catch(() => {
-        alert(`Your Avatar: ${combo}`);
-      });
+    function spinEmojiRoulette() {
+      if (isRouletteSpinning) return;
+      isRouletteSpinning = true;
+
+      const spinBtn = document.getElementById('roulette-spin-btn');
+      const statusText = document.getElementById('roulette-status-text');
+      if (spinBtn) {
+        spinBtn.disabled = true;
+        spinBtn.innerHTML = '<span>🌀</span> Spinning...';
+      }
+      if (statusText) {
+        statusText.textContent = 'Deciphering generational semiotics...';
+      }
+
+      playSynthesizedSound('whoosh');
+
+      // Random target index
+      const targetIndex = Math.floor(Math.random() * rouletteDatabase.length);
+      const slice = (Math.PI * 2) / rouletteDatabase.length;
+
+      // Calculate target angle so winning slice lands directly beneath top pointer (pointer at 3*PI/2)
+      const startAngle = rouletteAngle;
+      const extraSpins = 5 + Math.floor(Math.random() * 3); // 5 to 7 full revolutions
+      let targetFinal = (3 * Math.PI / 2) - (targetIndex * slice + slice / 2);
+      while (targetFinal < startAngle + extraSpins * Math.PI * 2) {
+        targetFinal += Math.PI * 2;
+      }
+
+      const duration = 3200; // 3.2 seconds smooth spin
+      const startTime = performance.now();
+      let lastTickAngle = startAngle;
+
+      function easeOutQuart(x) {
+        return 1 - Math.pow(1 - x, 4);
+      }
+
+      function stepSpin(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const eased = easeOutQuart(progress);
+
+        rouletteAngle = startAngle + (targetFinal - startAngle) * eased;
+        drawRouletteWheel(rouletteAngle);
+
+        // Procedural audio tick when wheel passes sector boundary
+        if (Math.abs(rouletteAngle - lastTickAngle) >= slice) {
+          playSynthesizedSound('click');
+          lastTickAngle = rouletteAngle;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(stepSpin);
+        } else {
+          rouletteAngle = targetFinal;
+          drawRouletteWheel(rouletteAngle);
+          isRouletteSpinning = false;
+
+          if (spinBtn) {
+            spinBtn.disabled = false;
+            spinBtn.innerHTML = '<span>🎰</span> Spin Again';
+          }
+          if (statusText) {
+            statusText.textContent = `Landed on ${rouletteDatabase[targetIndex].glyph} ${rouletteDatabase[targetIndex].name}!`;
+          }
+
+          playSynthesizedSound('chime');
+          rouletteTotalSpins++;
+          rouletteHistory.unshift(rouletteDatabase[targetIndex].glyph);
+          if (rouletteHistory.length > 6) rouletteHistory.pop();
+
+          displayRouletteResult(rouletteDatabase[targetIndex]);
+        }
+      }
+
+      requestAnimationFrame(stepSpin);
+    }
+
+    function displayRouletteResult(item) {
+      const card = document.getElementById('roulette-result-card');
+      if (!card) return;
+
+      card.classList.add('revealed');
+      card.innerHTML = `
+        <div class="roulette-hero-display">
+          <div class="roulette-hero-glyph">${item.glyph}</div>
+          <div class="roulette-hero-meta">
+            <div class="roulette-hero-title">${item.name}</div>
+            <div class="roulette-badges-row">
+              <span class="dict-badge badge-hazard">${item.category}</span>
+              <span class="dict-badge badge-genz">${item.cohort}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="roulette-comparison-grid">
+          <div class="dict-box-genx">
+            <strong style="color:#FFE600; display:block; margin-bottom:4px;">👵 Gen X / Boomer:</strong>
+            <span>${item.genx}</span>
+          </div>
+          <div class="dict-box-genz">
+            <strong style="color:#39FF14; display:block; margin-bottom:4px;">⚡ Gen Z / Millennial:</strong>
+            <span>${item.genz}</span>
+          </div>
+        </div>
+
+        <div class="roulette-lore-text">
+          <strong style="color:#00F0FF; display:block; margin-bottom:4px;">📜 Cultural Lore & Semiotics:</strong>
+          <span>${item.lore}</span>
+        </div>
+
+        <div class="roulette-tip-text">
+          <strong>⚠️ Workplace Advisory:</strong> <span>${item.tip}</span>
+        </div>
+
+        <div class="roulette-history-row">
+          <span>TOTAL SPINS: <strong style="color:#00F0FF;">#${rouletteTotalSpins}</strong></span>
+          <span>RECENT: <strong style="color:#FFE600;">${rouletteHistory.join(' ')}</strong></span>
+        </div>
+      `;
     }
 
     /* ==========================================================================
@@ -4063,7 +4539,7 @@ window.PythonBridge = {
       initWordle();
       initCountryCombobox();
       generateNewCountryPuzzle();
-      initAvatarBuilder();
+      initRouletteGame();
       initTriviaGame();
       updateSlideUI();
     });
