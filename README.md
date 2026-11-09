@@ -357,61 +357,35 @@ To provide a preview of the presentation's visual polish, screenshots are organi
 ```
 > *Placeholder path:* `docs/screenshots/hero_3d_helix.png`  
 > *Illustration:* The Three.js WebGL canvas running on Slide 1, depicting the glowing cyan Catmull-Rom spline helix with 10 procedurally rendered emoji heads dynamically tracking the cursor position.
-
+> https://github.com/user-attachments/assets/765c1058-62fc-4297-902f-5da3cca52190
 ---
 
 ### Generational Dictionary & Comparative Semiotics (Slide 2)
 ```
-  ┌─────────────────────────────────────────────────────────────┐
-  │  GENERATIONAL EMOJI DICTIONARY                              │
-  │  [ Filter: All | Workplace Hazards | Youth Inversion ]      │
-  │                                                             │
-  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐        │
-  │  │  👍 THUMBS UP │ │  🙂 SMILE    │ │  💀 SKULL    │        │
-  │  ├──────────────┤ ├──────────────┤ ├──────────────┤        │
-  │  │ Gen X: Agree │ │ Gen X: Polite│ │ Gen X: Danger │        │
-  │  │ Gen Z: Hostile│ │ Gen Z: Rage  │ │ Gen Z: Dying 🤣│      │
-  │  └──────────────┘ └──────────────┘ └──────────────┘        │
-  └─────────────────────────────────────────────────────────────┘
 ```
-> *Placeholder path:* `docs/screenshots/emoji_dictionary.png`  
 > *Illustration:* Glassmorphic cards contrasting Gen X pragmatic literalism with Gen Z post-ironic subversion, complete with instant category filters and search bar.
-
+<img width="799" height="449" alt="Slide2" src="https://github.com/user-attachments/assets/24527dcc-5dd6-4ee5-9eda-a4fc4659b150" />
 ---
 
 ### Interactive Mini-Games: Wordle, Country Triad Decoder & Roulette (Slides 5, 6, 7)
 ```
-  ┌───────────────────────┐ ┌───────────────────────┐ ┌───────────────────────┐
-  │     EMOJI WORDLE      │ │ COUNTRY TRIAD DECODER │ │    EMOJI ROULETTE     │
-  │  Clue: "Morbid glyph  │ │  Icons: 🗼 🥖 🍷      │ │       ╭───────╮       │
-  │  meaning Gen Z laugh" │ │                       │ │      │   🎯   │       │
-  │  [S][K][U][L][L] 🟩🟩 │ │  Input: [ France    ] │ │       ╰───────╯       │
-  │  [ Virtual Keyboard ] │ │  Streak: 🔥 5  Hint?  │ │  [ 🎰 Spin Roulette ] │
-  └───────────────────────┘ └───────────────────────┘ └───────────────────────┘
+
+https://github.com/user-attachments/assets/6af33fc5-641b-4582-b093-5fd357f21ecf
+
+
 ```
-> *Placeholder paths:* 
-> - `docs/screenshots/emoji_wordle.png`
-> - `docs/screenshots/country_decoder.png`
-> - `docs/screenshots/emoji_roulette.png`  
+<img width="728" height="385" alt="Slides 7" src="https://github.com/user-attachments/assets/76a35a91-80b6-41d9-ae07-3e716f5ce013" />
+<img width="729" height="391" alt="Slides 5" src="https://github.com/user-attachments/assets/18e85fe3-7fe3-4d18-b9ff-7d7968cab92e" />
+<img width="710" height="431" alt="Slides  6" src="https://github.com/user-attachments/assets/62193740-85cb-4edf-9882-bfcafa79c50a" /> 
 > *Illustration:* The three custom puzzle stages highlighting dual keyboard input, Brython-powered country generation, and canvas physics deceleration.
 
 ---
 
 ### "Catch the Emoji" 60 FPS Arcade Arena (Slide 10)
 ```
-  ┌─────────────────────────────────────────────────────────────┐
-  │  [ ❤️ ❤️ ❤️ ]      SCORE: 485      TIMER: 00:18    BEST: 620 │
-  │                                                             │
-  │            💖 (+30)                 🔥 (+25)                │
-  │                                                             │
-  │                    💣 [-50 BOMB!]                           │
-  │                                                             │
-  │     ⭐ (+20)                               😂 (+10)         │
-  └─────────────────────────────────────────────────────────────┘
 ```
-> *Placeholder path:* `docs/screenshots/arcade_minigame.png`  
 > *Illustration:* Smooth 60 FPS canvas displaying floating emojis, hazard bombs, floating score pings, and real-time combo multipliers.
-
+<img width="707" height="432" alt="Slide 10" src="https://github.com/user-attachments/assets/e013104b-9d55-4c18-8ac7-9227d57c40b9" />
 ---
 
 ## 5. Setup & Execution Instructions
